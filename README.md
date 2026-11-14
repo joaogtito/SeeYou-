@@ -1,6 +1,6 @@
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/joaogtito/SeeYou-/bcea75696e4e3681ebc500a0d5a302781f80d708/github_logo.svg" alt="Logo da SeeYou Finder"/>
+  <img src="https://raw.githubusercontent.com/joaogtito/SeeYou-/refs/heads/feat/readme-update/github_logo.png" alt="Logo da SeeYou Finder"/>
 </p>
 
 O **SeeYou Finder** é uma ferramenta de analise de dados avançada com um visualizador em globo 3D com três corpos (Terra, Lua, Marte).
