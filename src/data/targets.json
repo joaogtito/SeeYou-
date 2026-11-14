@@ -1,0 +1,128 @@
+[
+  {
+    "id": "moon_shackleton_ridge",
+    "body": "moon",
+    "name": { "pt": "Shackleton – connecting ridge", "en": "Shackleton – connecting ridge" },
+    "short": { "pt": "Borda de Shackleton", "en": "Shackleton rim" },
+    "lat": -89.5, "lon": 0,
+    "blurb": {
+      "pt": "Crista iluminada junto ao polo sul lunar, região candidata do programa Artemis. Sol sempre rasante e crateras sombreadas com gelo por perto.",
+      "en": "Sunlit ridge next to the lunar south pole, an Artemis candidate region. Permanently grazing sun, with icy shadowed craters nearby."
+    },
+    "params": {
+      "slope_deg": 8, "roughness_m": 120, "temp_range_k": 100, "temp_min_k": 90,
+      "precip_mm": 0, "ndvi": 0, "albedo": 0.2,
+      "illumination": "polar_grazing", "ground_ice": true
+    },
+    "never_on_earth": {
+      "pt": ["gravidade de 1/6 g", "vácuo", "radiação sem atmosfera nem campo magnético"],
+      "en": ["1/6 g gravity", "hard vacuum", "radiation with no atmosphere or magnetic field"]
+    },
+    "_mock": true
+  },
+  {
+    "id": "moon_psr_cabeus",
+    "body": "moon",
+    "name": { "pt": "Cratera sombreada com gelo (Cabeus)", "en": "Icy permanently shadowed crater (Cabeus)" },
+    "short": { "pt": "Cratera sombreada", "en": "Shadowed crater" },
+    "lat": -84.9, "lon": -35.5,
+    "blurb": {
+      "pt": "Interior de cratera permanentemente sombreada, onde o gelo de água se mantém estável. É o recurso que justifica uma base no polo sul.",
+      "en": "Floor of a permanently shadowed crater where water ice stays stable. This is the resource that justifies a south-pole base."
+    },
+    "params": {
+      "slope_deg": 15, "roughness_m": 200, "temp_range_k": 10, "temp_min_k": 40,
+      "precip_mm": 0, "ndvi": 0, "albedo": 0.12,
+      "illumination": "permanent_shadow", "ground_ice": true
+    },
+    "never_on_earth": {
+      "pt": ["gravidade de 1/6 g", "vácuo", "temperaturas abaixo de 50 K", "escuridão permanente"],
+      "en": ["1/6 g gravity", "hard vacuum", "temperatures below 50 K", "permanent darkness"]
+    },
+    "_mock": true
+  },
+  {
+    "id": "moon_mare_tranquillitatis",
+    "body": "moon",
+    "name": { "pt": "Planície de mare basáltico (Tranquillitatis)", "en": "Basaltic mare plain (Tranquillitatis)" },
+    "short": { "pt": "Mare basáltico", "en": "Basaltic mare" },
+    "lat": 0.67, "lon": 23.47,
+    "blurb": {
+      "pt": "Planície escura de basalto, o terreno lunar \"típico\" das missões Apollo. Plano, com dia e noite de cerca de 14 dias terrestres cada.",
+      "en": "Dark basalt plain, the \"typical\" lunar terrain of the Apollo missions. Flat, with day and night lasting about 14 Earth days each."
+    },
+    "params": {
+      "slope_deg": 2, "roughness_m": 20, "temp_range_k": 280, "temp_min_k": 95,
+      "precip_mm": 0, "ndvi": 0, "albedo": 0.07,
+      "illumination": "long_day_night", "ground_ice": false
+    },
+    "never_on_earth": {
+      "pt": ["gravidade de 1/6 g", "vácuo", "amplitude térmica de quase 300 K", "radiação sem atmosfera"],
+      "en": ["1/6 g gravity", "hard vacuum", "a thermal swing of almost 300 K", "radiation with no atmosphere"]
+    },
+    "_mock": true
+  },
+  {
+    "id": "mars_jezero",
+    "body": "mars",
+    "name": { "pt": "Cratera Jezero", "en": "Jezero Crater" },
+    "short": { "pt": "Jezero", "en": "Jezero" },
+    "lat": 18.38, "lon": 77.58,
+    "blurb": {
+      "pt": "Cratera com um delta fossilizado de um antigo lago, explorada pelo rover Perseverance.",
+      "en": "Crater holding the fossil delta of an ancient lake, explored by the Perseverance rover."
+    },
+    "params": {
+      "slope_deg": 4, "roughness_m": 60, "temp_range_k": 80, "temp_min_k": 190,
+      "precip_mm": 0, "ndvi": 0, "albedo": 0.2,
+      "illumination": null, "ground_ice": false
+    },
+    "never_on_earth": {
+      "pt": ["gravidade de 0,38 g", "pressão de cerca de 0,6% da terrestre", "atmosfera de CO₂", "radiação UV e cósmica na superfície"],
+      "en": ["0.38 g gravity", "pressure about 0.6% of Earth's", "CO₂ atmosphere", "UV and cosmic radiation at the surface"]
+    },
+    "_mock": true
+  },
+  {
+    "id": "mars_gale",
+    "body": "mars",
+    "name": { "pt": "Cratera Gale", "en": "Gale Crater" },
+    "short": { "pt": "Gale", "en": "Gale" },
+    "lat": -4.59, "lon": 137.44,
+    "blurb": {
+      "pt": "Cratera de impacto com um monte central de sedimentos em camadas (Aeolis Mons), explorada pelo rover Curiosity.",
+      "en": "Impact crater with a central mound of layered sediments (Aeolis Mons), explored by the Curiosity rover."
+    },
+    "params": {
+      "slope_deg": 5, "roughness_m": 90, "temp_range_k": 85, "temp_min_k": 185,
+      "precip_mm": 0, "ndvi": 0, "albedo": 0.22,
+      "illumination": null, "ground_ice": false
+    },
+    "never_on_earth": {
+      "pt": ["gravidade de 0,38 g", "pressão de cerca de 0,6% da terrestre", "atmosfera de CO₂", "radiação UV e cósmica na superfície"],
+      "en": ["0.38 g gravity", "pressure about 0.6% of Earth's", "CO₂ atmosphere", "UV and cosmic radiation at the surface"]
+    },
+    "_mock": true
+  },
+  {
+    "id": "mars_arcadia",
+    "body": "mars",
+    "name": { "pt": "Arcadia Planitia", "en": "Arcadia Planitia" },
+    "short": { "pt": "Arcadia", "en": "Arcadia" },
+    "lat": 47.2, "lon": -175.7,
+    "blurb": {
+      "pt": "Planície de latitude média com gelo de água raso sob o solo, candidata a pouso humano.",
+      "en": "Mid-latitude plain with shallow subsurface water ice, a candidate site for human landing."
+    },
+    "params": {
+      "slope_deg": 1, "roughness_m": 15, "temp_range_k": 60, "temp_min_k": 150,
+      "precip_mm": 0, "ndvi": 0, "albedo": 0.25,
+      "illumination": null, "ground_ice": true
+    },
+    "never_on_earth": {
+      "pt": ["gravidade de 0,38 g", "pressão de cerca de 0,6% da terrestre", "atmosfera de CO₂", "radiação UV e cósmica na superfície"],
+      "en": ["0.38 g gravity", "pressure about 0.6% of Earth's", "CO₂ atmosphere", "UV and cosmic radiation at the surface"]
+    },
+    "_mock": true
+  }
+]

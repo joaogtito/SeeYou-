@@ -1,0 +1,98 @@
+[
+  {
+    "id": "araguainha",
+    "name": { "pt": "Domo de Araguainha (MT/GO, Brasil)", "en": "Araguainha Dome (Brazil)" },
+    "lat": -16.78, "lon": -52.98,
+    "pair": "mars_gale",
+    "discovery": true,
+    "why": {
+      "pt": "Maior cratera de impacto da América do Sul, com cerca de 40 km de diâmetro, escavada em rochas sedimentares e com um núcleo central soerguido. É a mesma arquitetura de Gale: bacia de impacto mais elevação central em sedimentos. Quase não aparece na literatura de análogos.",
+      "en": "The largest impact crater in South America, about 40 km across, excavated in sedimentary rock with an uplifted central core. It has the same architecture as Gale: an impact basin with a central rise in sediments. It is barely mentioned in the analog literature."
+    },
+    "breaks": {
+      "pt": "Clima de cerrado: chuva e vegetação abundantes cobrem a estrutura, e a erosão já removeu boa parte do relevo original.",
+      "en": "Savanna climate: abundant rain and vegetation cover the structure, and erosion has already removed much of the original relief."
+    },
+    "_mock": true
+  },
+  {
+    "id": "atacama",
+    "name": { "pt": "Deserto do Atacama – Yungay (Chile)", "en": "Atacama Desert – Yungay (Chile)" },
+    "lat": -24.07, "lon": -69.87,
+    "pair": "mars_jezero",
+    "discovery": false,
+    "why": {
+      "pt": "Núcleo hiperárido do Atacama, um dos lugares mais secos da Terra. Solo exposto, quase sem vida microbiana e com sais, usado há décadas para testar instrumentos de busca de vida em Marte.",
+      "en": "The hyperarid core of the Atacama, one of the driest places on Earth. Bare, salty soil with almost no microbial life, used for decades to test Mars life-detection instruments."
+    },
+    "breaks": {
+      "pt": "Muito mais quente que Marte, com pressão e atmosfera terrestres. Não há delta nem antigo lago como em Jezero.",
+      "en": "Far warmer than Mars, with Earth's pressure and atmosphere. There is no delta or ancient lake like Jezero's."
+    },
+    "_mock": true
+  },
+  {
+    "id": "mcmurdo",
+    "name": { "pt": "Vales Secos de McMurdo (Antártida)", "en": "McMurdo Dry Valleys (Antarctica)" },
+    "lat": -77.5, "lon": 162.0,
+    "pair": "mars_arcadia",
+    "discovery": false,
+    "why": {
+      "pt": "Deserto polar frio, sem neve acumulada, com gelo preso no subsolo a poucos centímetros da superfície. É o mais próximo que a Terra chega do gelo raso de Arcadia.",
+      "en": "A cold polar desert with no snow cover and ground ice a few centimetres below the surface. It is the closest Earth gets to the shallow ice of Arcadia."
+    },
+    "breaks": {
+      "pt": "Relevo de vales glaciais, bem mais acidentado que a planície marciana, e ainda dezenas de graus mais quente.",
+      "en": "Glacial valley relief, much rougher than the Martian plain, and still tens of degrees warmer."
+    },
+    "_mock": true
+  },
+  {
+    "id": "haughton",
+    "name": { "pt": "Cratera Haughton – Ilha Devon (Canadá)", "en": "Haughton Crater – Devon Island (Canada)" },
+    "lat": 75.38, "lon": -89.67,
+    "pair": "moon_shackleton_ridge",
+    "discovery": false,
+    "why": {
+      "pt": "Cratera de impacto em deserto polar desabitado, com sol rasante no verão, noite polar no inverno e permafrost. Sedia há anos simulações de operação de base e de travessias com rover.",
+      "en": "An impact crater in an uninhabited polar desert, with grazing summer sun, polar night in winter, and permafrost. It has hosted base-operation and rover-traverse simulations for years."
+    },
+    "breaks": {
+      "pt": "Tem atmosfera, clima e degelo sazonal. A iluminação polar da Terra muda ao longo do ano, enquanto a crista de Shackleton fica iluminada quase o tempo todo.",
+      "en": "It has an atmosphere, weather, and seasonal thaw. Earth's polar lighting changes through the year, while the Shackleton ridge is lit almost all the time."
+    },
+    "_mock": true
+  },
+  {
+    "id": "askja",
+    "name": { "pt": "Campos de lava de Askja (Islândia)", "en": "Askja lava fields (Iceland)" },
+    "lat": 65.03, "lon": -16.75,
+    "pair": "moon_mare_tranquillitatis",
+    "discovery": false,
+    "why": {
+      "pt": "Planícies de basalto jovem, escuras e sem vegetação. Os astronautas da Apollo treinaram geologia de campo aqui antes de ir aos mares lunares.",
+      "en": "Young, dark, vegetation-free basalt plains. Apollo astronauts trained in field geology here before going to the lunar maria."
+    },
+    "breaks": {
+      "pt": "Chuva, neve e água líquida alteram a rocha. Falta o regolito fino produzido por bilhões de anos de impactos.",
+      "en": "Rain, snow, and liquid water alter the rock. It lacks the fine regolith produced by billions of years of impacts."
+    },
+    "_mock": true
+  },
+  {
+    "id": "maunaloa",
+    "name": { "pt": "Mauna Loa – HI-SEAS (Havaí)", "en": "Mauna Loa – HI-SEAS (Hawaii)" },
+    "lat": 19.6, "lon": -155.49,
+    "pair": "moon_mare_tranquillitatis",
+    "discovery": false,
+    "why": {
+      "pt": "Encosta de basalto a cerca de 2.500 m de altitude, árida e sem vegetação, onde fica o habitat de simulação HI-SEAS para missões longas à Lua e a Marte.",
+      "en": "A basalt slope about 2,500 m up, arid and bare, home to the HI-SEAS simulation habitat for long-duration Moon and Mars missions."
+    },
+    "breaks": {
+      "pt": "Clima tropical de montanha: temperaturas amenas e ciclo dia–noite de 24 horas.",
+      "en": "A tropical mountain climate: mild temperatures and a 24-hour day–night cycle."
+    },
+    "_mock": true
+  }
+]

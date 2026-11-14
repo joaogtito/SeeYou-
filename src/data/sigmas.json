@@ -1,0 +1,22 @@
+{
+  "_mock": true,
+  "_note": "Tolerâncias (sigma) e pesos PROVISÓRIOS, do plano do projeto. O time deve justificar cada sigma em uma frase.",
+  "params": {
+    "slope_deg":     { "sigma": 5,   "dim": "relevo",     "unit": "°" },
+    "roughness_m":   { "sigma": 30,  "dim": "relevo",     "unit": "m" },
+    "temp_range_k":  { "sigma": 30,  "dim": "termica",    "unit": "K" },
+    "temp_min_k":    { "sigma": 20,  "dim": "termica",    "unit": "K" },
+    "precip_mm":     { "sigma": 50,  "dim": "agua",       "unit": "mm", "one_sided": true },
+    "ground_ice":    { "dim": "agua", "categorical": true },
+    "ndvi":          { "sigma": 0.1, "dim": "superficie", "unit": "",   "one_sided": true },
+    "albedo":        { "sigma": 0.1, "dim": "superficie", "unit": "" },
+    "illumination":  { "dim": "operacao", "categorical": true }
+  },
+  "illumination_match": {
+    "polar_grazing":    { "polar": 0.8,  "mid": 0.25, "tropical": 0.05 },
+    "permanent_shadow": { "polar": 0.35, "mid": 0.05, "tropical": 0.0 },
+    "long_day_night":   { "polar": 0.3,  "mid": 0.1,  "tropical": 0.1 }
+  },
+  "ground_ice_match": { "match": 1, "mismatch": 0.1 },
+  "weights": { "relevo": 1, "termica": 1, "superficie": 1, "agua": 1, "operacao": 1 }
+}
