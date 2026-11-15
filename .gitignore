@@ -1,3 +1,9 @@
 node_modules
 dist
 .DS_Store
+
+# Server (Python / uv)
+.venv/
+__pycache__/
+*.pyc
+graphify-out/

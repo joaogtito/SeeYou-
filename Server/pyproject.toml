@@ -1,0 +1,22 @@
+[project]
+name = "seeyou-server"
+version = "0.1.0"
+description = "Backend do SeeYou"
+readme = "README.md"
+authors = [
+    { name = "joaogtito", email = "joaogtito@gmail.com" }
+]
+requires-python = ">=3.14"
+dependencies = []
+
+[project.scripts]
+seeyou-server = "seeyou_server:main"
+
+[build-system]
+requires = ["uv_build>=0.13.8,<0.14.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "graphifyy>=0.9.109",
+]
