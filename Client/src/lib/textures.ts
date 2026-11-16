@@ -30,8 +30,9 @@ export const SOURCES: Record<string, TileSource> = {
   },
   earth_heat: {
     kind: 'gibs',
-    url: (z, r, c) => `${GIBS}/MODIS_Terra_Land_Surface_Temp_Day/default/2022-07-12/1km/${z}/${r}/${c}.png`,
-    credit: 'NASA GIBS – MODIS Terra LST (dia, 2022-07-12)',
+    // Média mensal (MOD11C3): sem os buracos de nuvem e de órbita da imagem diária.
+    url: (z, r, c) => `${GIBS}/MODIS_Terra_L3_Land_Surface_Temp_Monthly_Day/default/2022-07-01/2km/${z}/${r}/${c}.png`,
+    credit: 'NASA GIBS – MODIS Terra LST (média mensal diurna, jul/2022)',
   },
   moon_sat: {
     kind: 'trek',
@@ -197,12 +198,23 @@ export function drawSimilarity(
 
   // Estica as notas entre o mínimo e o máximo para o mapa ter contraste.
   let min = 1, max = 0;
-  for (let i = 0; i < scores.length; i++) { if (scores[i] < min) min = scores[i]; if (scores[i] > max) max = scores[i]; }
+  for (let i = 0; i < scores.length; i++) {
+    if (Number.isNaN(scores[i])) continue;
+    if (scores[i] < min) min = scores[i];
+    if (scores[i] > max) max = scores[i];
+  }
   const range = Math.max(1e-6, max - min);
   const ppd = width / 360;
   const size = grid.res * ppd;
   for (let i = 0; i < grid.land.length; i++) {
     const c = grid.land[i];
+    if (Number.isNaN(scores[i])) {
+      // dados insuficientes: cinza discreto, fora da escala de cor
+      ctx.globalAlpha = 0.18;
+      ctx.fillStyle = 'rgb(140,140,150)';
+      ctx.fillRect((c.lon - grid.res / 2 + 180) * ppd, (90 - c.lat - grid.res / 2) * ppd, size + 0.6, size + 0.6);
+      continue;
+    }
     const s = (scores[i] - min) / range;
     const [r, g, b] = simColor(s, accent);
     ctx.globalAlpha = 0.25 + 0.7 * s;

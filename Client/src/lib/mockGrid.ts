@@ -129,12 +129,14 @@ export function gridFromFile(raw: any): EarthGrid {
     const lon = rowArr[1];
     const o: any = {};
     f.forEach((name, i) => { o[name] = rowArr[i + 2]; });
+    // null (ou campo ausente) = sem dado; a métrica trata como N/A.
+    const num = (v: unknown): number | null => (typeof v === 'number' && Number.isFinite(v) ? v : null);
     const p: EarthParams = {
-      slope_deg: o.slope_deg, roughness_m: o.roughness_m,
-      temp_range_k: o.temp_range_k, temp_min_k: o.temp_min_k,
-      precip_mm: o.precip_mm, ndvi: o.ndvi, albedo: o.albedo,
+      slope_deg: num(o.slope_deg), roughness_m: num(o.roughness_m),
+      temp_range_k: num(o.temp_range_k), temp_min_k: num(o.temp_min_k),
+      precip_mm: num(o.precip_mm), ndvi: num(o.ndvi), albedo: num(o.albedo),
       illumination: illuminationOf(lat),
-      ground_ice: !!o.ground_ice,
+      ground_ice: o.ground_ice === null || o.ground_ice === undefined ? null : !!o.ground_ice,
     };
     const cell: Cell = { lat, lon, p };
     const col = Math.min(cols - 1, Math.floor((lon + 180) / res));

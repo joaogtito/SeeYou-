@@ -1,13 +1,27 @@
 [project]
 name = "seeyou-server"
 version = "0.1.0"
-description = "Backend do SeeYou"
+description = "Pipeline offline de dados reais do SeeYou (Analog Finder)"
 readme = "README.md"
 authors = [
     { name = "joaogtito", email = "joaogtito@gmail.com" }
 ]
-requires-python = ">=3.14"
-dependencies = []
+requires-python = ">=3.11,<3.14"
+dependencies = [
+    "earthaccess>=0.17.0",
+    "h5netcdf>=1.8.3",
+    "h5py>=3.16.0",
+    "numpy>=2.4.6",
+    "pandas>=3.1.1",
+    "pyarrow>=26.0.1",
+    "pyhdf>=0.11.7",
+    "pyyaml>=6.0.3",
+    "rasterio>=1.4.4",
+    "requests>=2.34.2",
+    "rioxarray>=0.19.0",
+    "scipy>=1.17.1",
+    "xarray>=2026.9.0",
+]
 
 [project.scripts]
 seeyou-server = "seeyou_server:main"
@@ -19,4 +33,5 @@ build-backend = "uv_build"
 [dependency-groups]
 dev = [
     "graphifyy>=0.9.109",
+    "pytest>=9.2.0",
 ]

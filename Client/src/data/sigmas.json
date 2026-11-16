@@ -18,5 +18,6 @@
     "long_day_night":   { "polar": 0.3,  "mid": 0.1,  "tropical": 0.1 }
   },
   "ground_ice_match": { "match": 1, "mismatch": 0.1 },
+  "min_data": { "max_missing": 1, "_note": "Se faltar dado da Terra em mais de max_missing parâmetros que se aplicam ao alvo, a célula fica sem nota (dados insuficientes)." },
   "weights": { "relevo": 1, "termica": 1, "superficie": 1, "agua": 1, "operacao": 1 }
 }

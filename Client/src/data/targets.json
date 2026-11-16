@@ -2,127 +2,395 @@
   {
     "id": "moon_shackleton_ridge",
     "body": "moon",
-    "name": { "pt": "Shackleton – connecting ridge", "en": "Shackleton – connecting ridge" },
-    "short": { "pt": "Borda de Shackleton", "en": "Shackleton rim" },
-    "lat": -89.5, "lon": 0,
+    "name": {
+      "pt": "Shackleton – connecting ridge",
+      "en": "Shackleton – connecting ridge"
+    },
+    "short": {
+      "pt": "Borda de Shackleton",
+      "en": "Shackleton rim"
+    },
+    "lat": -89.5,
+    "lon": 0,
     "blurb": {
       "pt": "Crista iluminada junto ao polo sul lunar, região candidata do programa Artemis. Sol sempre rasante e crateras sombreadas com gelo por perto.",
       "en": "Sunlit ridge next to the lunar south pole, an Artemis candidate region. Permanently grazing sun, with icy shadowed craters nearby."
     },
     "params": {
-      "slope_deg": 8, "roughness_m": 120, "temp_range_k": 100, "temp_min_k": 90,
-      "precip_mm": 0, "ndvi": 0, "albedo": 0.2,
-      "illumination": "polar_grazing", "ground_ice": true
+      "slope_deg": 5.2,
+      "roughness_m": 65,
+      "temp_range_k": 140,
+      "temp_min_k": 60,
+      "precip_mm": 0,
+      "ndvi": 0,
+      "albedo": 0.15,
+      "illumination": "polar_grazing",
+      "ground_ice": true
     },
     "never_on_earth": {
-      "pt": ["gravidade de 1/6 g", "vácuo", "radiação sem atmosfera nem campo magnético"],
-      "en": ["1/6 g gravity", "hard vacuum", "radiation with no atmosphere or magnetic field"]
+      "pt": [
+        "gravidade de 1/6 g",
+        "vácuo",
+        "radiação sem atmosfera nem campo magnético"
+      ],
+      "en": [
+        "1/6 g gravity",
+        "hard vacuum",
+        "radiation with no atmosphere or magnetic field"
+      ]
     },
-    "_mock": true
+    "_mock": false,
+    "sources": {
+      "slope_deg": "LOLA (LRO), mosaico global LDEM 118 m/px (USGS Astrogeology, Mar 2014): média de 19 blocos de ~2 km num raio de 5 km do ponto",
+      "roughness_m": "LOLA (LRO), mosaico global LDEM 118 m/px (USGS Astrogeology, Mar 2014): média de 19 blocos de ~2 km num raio de 5 km do ponto",
+      "temp_range_k": "Paige et al. 2010 (Science 330:479) e revisão Diviner; Williams et al. 2019 (JGR Planets, doi:10.1029/2019JE006028), sítio Connecting Ridge C2. Nota: 180 K (pico de verão) − 38 K (noite polar) para superfície horizontal a 89°",
+      "temp_min_k": "Williams et al. 2019 (Diviner, séries sazonais do sítio C2); Gläser et al. 2018 (iluminação). Nota: a crista fica iluminada ~80–90% do ano; mínima entre a noite polar (38 K) e a sombra curta de inverno",
+      "precip_mm": "Sem atmosfera: chuva = 0 por definição (regra 1 do plano)",
+      "ndvi": "Sem vegetação: NDVI = 0 por definição",
+      "albedo": "Albedo bolométrico típico das terras altas lunares usado nos modelos Diviner (Vasavada et al. 2012, JGR 117)",
+      "illumination": "LOLA, iluminação do polo sul (Mazarico et al. 2011; Gläser et al. 2018)",
+      "ground_ice": "Crateras permanentemente sombreadas vizinhas (Shackleton, de Gerlache) são armadilhas frias com gelo estável (Diviner/LEND)"
+    },
+    "confidence": {
+      "slope_deg": "computed",
+      "roughness_m": "computed",
+      "temp_range_k": "derived",
+      "temp_min_k": "estimate",
+      "precip_mm": "published",
+      "ndvi": "published",
+      "albedo": "estimate",
+      "illumination": "published",
+      "ground_ice": "published"
+    }
   },
   {
     "id": "moon_psr_cabeus",
     "body": "moon",
-    "name": { "pt": "Cratera sombreada com gelo (Cabeus)", "en": "Icy permanently shadowed crater (Cabeus)" },
-    "short": { "pt": "Cratera sombreada", "en": "Shadowed crater" },
-    "lat": -84.9, "lon": -35.5,
+    "name": {
+      "pt": "Cratera sombreada com gelo (Cabeus)",
+      "en": "Icy permanently shadowed crater (Cabeus)"
+    },
+    "short": {
+      "pt": "Cratera sombreada",
+      "en": "Shadowed crater"
+    },
+    "lat": -84.9,
+    "lon": -35.5,
     "blurb": {
       "pt": "Interior de cratera permanentemente sombreada, onde o gelo de água se mantém estável. É o recurso que justifica uma base no polo sul.",
       "en": "Floor of a permanently shadowed crater where water ice stays stable. This is the resource that justifies a south-pole base."
     },
     "params": {
-      "slope_deg": 15, "roughness_m": 200, "temp_range_k": 10, "temp_min_k": 40,
-      "precip_mm": 0, "ndvi": 0, "albedo": 0.12,
-      "illumination": "permanent_shadow", "ground_ice": true
+      "slope_deg": 4.7,
+      "roughness_m": 74,
+      "temp_range_k": 15,
+      "temp_min_k": 37,
+      "precip_mm": 0,
+      "ndvi": 0,
+      "albedo": 0.15,
+      "illumination": "permanent_shadow",
+      "ground_ice": true
     },
     "never_on_earth": {
-      "pt": ["gravidade de 1/6 g", "vácuo", "temperaturas abaixo de 50 K", "escuridão permanente"],
-      "en": ["1/6 g gravity", "hard vacuum", "temperatures below 50 K", "permanent darkness"]
+      "pt": [
+        "gravidade de 1/6 g",
+        "vácuo",
+        "temperaturas abaixo de 50 K",
+        "escuridão permanente"
+      ],
+      "en": [
+        "1/6 g gravity",
+        "hard vacuum",
+        "temperatures below 50 K",
+        "permanent darkness"
+      ]
     },
-    "_mock": true
+    "_mock": false,
+    "sources": {
+      "slope_deg": "LOLA (LRO), mosaico global LDEM 118 m/px (USGS Astrogeology, Mar 2014): média de 19 blocos de ~2 km num raio de 5 km do ponto",
+      "roughness_m": "LOLA (LRO), mosaico global LDEM 118 m/px (USGS Astrogeology, Mar 2014): média de 19 blocos de ~2 km num raio de 5 km do ponto",
+      "temp_range_k": "Paige et al. 2010 (Science 330:479): máximas anuais em PSRs grandes de 40–90 K. Nota: região em sombra permanente: só aquece por luz refletida e calor interno",
+      "temp_min_k": "Diviner, Paige et al. 2010 (Science 330:479). Nota: temperatura média anual da parte em sombra permanente; 40 K no ponto do LCROSS antes do impacto",
+      "precip_mm": "Sem atmosfera: chuva = 0 por definição",
+      "ndvi": "Sem vegetação: NDVI = 0 por definição",
+      "albedo": "Albedo bolométrico das terras altas lunares (Vasavada et al. 2012); dentro da PSR não há luz direta",
+      "illumination": "LOLA: região em sombra permanente (Mazarico et al. 2011)",
+      "ground_ice": "LCROSS: 5,6 ± 2,9% de água em massa no regolito do ponto de impacto (Colaprete et al. 2010, Science 330:463); LEND: hidrogênio elevado em Cabeus"
+    },
+    "confidence": {
+      "slope_deg": "computed",
+      "roughness_m": "computed",
+      "temp_range_k": "estimate",
+      "temp_min_k": "published",
+      "precip_mm": "published",
+      "ndvi": "published",
+      "albedo": "estimate",
+      "illumination": "published",
+      "ground_ice": "published"
+    }
   },
   {
     "id": "moon_mare_tranquillitatis",
     "body": "moon",
-    "name": { "pt": "Planície de mare basáltico (Tranquillitatis)", "en": "Basaltic mare plain (Tranquillitatis)" },
-    "short": { "pt": "Mare basáltico", "en": "Basaltic mare" },
-    "lat": 0.67, "lon": 23.47,
+    "name": {
+      "pt": "Planície de mare basáltico (Tranquillitatis)",
+      "en": "Basaltic mare plain (Tranquillitatis)"
+    },
+    "short": {
+      "pt": "Mare basáltico",
+      "en": "Basaltic mare"
+    },
+    "lat": 0.67,
+    "lon": 23.47,
     "blurb": {
       "pt": "Planície escura de basalto, o terreno lunar \"típico\" das missões Apollo. Plano, com dia e noite de cerca de 14 dias terrestres cada.",
       "en": "Dark basalt plain, the \"typical\" lunar terrain of the Apollo missions. Flat, with day and night lasting about 14 Earth days each."
     },
     "params": {
-      "slope_deg": 2, "roughness_m": 20, "temp_range_k": 280, "temp_min_k": 95,
-      "precip_mm": 0, "ndvi": 0, "albedo": 0.07,
-      "illumination": "long_day_night", "ground_ice": false
+      "slope_deg": 0.7,
+      "roughness_m": 11,
+      "temp_range_k": 284,
+      "temp_min_k": 95,
+      "precip_mm": 0,
+      "ndvi": 0,
+      "albedo": 0.07,
+      "illumination": "long_day_night",
+      "ground_ice": false
     },
     "never_on_earth": {
-      "pt": ["gravidade de 1/6 g", "vácuo", "amplitude térmica de quase 300 K", "radiação sem atmosfera"],
-      "en": ["1/6 g gravity", "hard vacuum", "a thermal swing of almost 300 K", "radiation with no atmosphere"]
+      "pt": [
+        "gravidade de 1/6 g",
+        "vácuo",
+        "amplitude térmica de quase 300 K",
+        "radiação sem atmosfera"
+      ],
+      "en": [
+        "1/6 g gravity",
+        "hard vacuum",
+        "a thermal swing of almost 300 K",
+        "radiation with no atmosphere"
+      ]
     },
-    "_mock": true
+    "_mock": false,
+    "sources": {
+      "slope_deg": "LOLA (LRO), mosaico global LDEM 118 m/px (USGS Astrogeology, Mar 2014): média de 71 blocos de ~2 km num raio de 10 km do ponto",
+      "roughness_m": "LOLA (LRO), mosaico global LDEM 118 m/px (USGS Astrogeology, Mar 2014): média de 71 blocos de ~2 km num raio de 10 km do ponto",
+      "temp_range_k": "Diviner, Vasavada et al. 2012 (JGR Planets 117, E00H18). Nota: 385 K ao meio-dia − 101 K à meia-noite, temperaturas típicas equatoriais",
+      "temp_min_k": "Diviner, Vasavada et al. 2012 (JGR Planets 117, E00H18). Nota: mínima antes do nascer do Sol no equador",
+      "precip_mm": "Sem atmosfera: chuva = 0 por definição",
+      "ndvi": "Sem vegetação: NDVI = 0 por definição",
+      "albedo": "Albedo bolométrico típico de mare basáltico (modelos Diviner; Vasavada et al. 2012)",
+      "illumination": "Ciclo dia/noite lunar de ~29,5 dias terrestres",
+      "ground_ice": "Equador lunar: temperaturas diurnas não permitem gelo superficial estável"
+    },
+    "confidence": {
+      "slope_deg": "computed",
+      "roughness_m": "computed",
+      "temp_range_k": "derived",
+      "temp_min_k": "published",
+      "precip_mm": "published",
+      "ndvi": "published",
+      "albedo": "estimate",
+      "illumination": "published",
+      "ground_ice": "published"
+    }
   },
   {
     "id": "mars_jezero",
     "body": "mars",
-    "name": { "pt": "Cratera Jezero", "en": "Jezero Crater" },
-    "short": { "pt": "Jezero", "en": "Jezero" },
-    "lat": 18.38, "lon": 77.58,
+    "name": {
+      "pt": "Cratera Jezero",
+      "en": "Jezero Crater"
+    },
+    "short": {
+      "pt": "Jezero",
+      "en": "Jezero"
+    },
+    "lat": 18.38,
+    "lon": 77.58,
     "blurb": {
       "pt": "Cratera com um delta fossilizado de um antigo lago, explorada pelo rover Perseverance.",
       "en": "Crater holding the fossil delta of an ancient lake, explored by the Perseverance rover."
     },
     "params": {
-      "slope_deg": 4, "roughness_m": 60, "temp_range_k": 80, "temp_min_k": 190,
-      "precip_mm": 0, "ndvi": 0, "albedo": 0.2,
-      "illumination": null, "ground_ice": false
+      "slope_deg": 0.6,
+      "roughness_m": 7,
+      "temp_range_k": 88,
+      "temp_min_k": 185,
+      "precip_mm": 0,
+      "ndvi": 0,
+      "albedo": 0.16,
+      "illumination": null,
+      "ground_ice": false
     },
     "never_on_earth": {
-      "pt": ["gravidade de 0,38 g", "pressão de cerca de 0,6% da terrestre", "atmosfera de CO₂", "radiação UV e cósmica na superfície"],
-      "en": ["0.38 g gravity", "pressure about 0.6% of Earth's", "CO₂ atmosphere", "UV and cosmic radiation at the surface"]
+      "pt": [
+        "gravidade de 0,38 g",
+        "pressão de cerca de 0,6% da terrestre",
+        "atmosfera de CO₂",
+        "radiação UV e cósmica na superfície"
+      ],
+      "en": [
+        "0.38 g gravity",
+        "pressure about 0.6% of Earth's",
+        "CO₂ atmosphere",
+        "UV and cosmic radiation at the surface"
+      ]
     },
-    "_mock": true
+    "_mock": false,
+    "sources": {
+      "slope_deg": "MOLA (MGS), mosaico global 463 m/px (USGS Astrogeology): média de 88 blocos de ~2 km num raio de 10 km do ponto",
+      "roughness_m": "MOLA (MGS), mosaico global 463 m/px (USGS Astrogeology): média de 88 blocos de ~2 km num raio de 10 km do ponto",
+      "temp_range_k": "Perseverance MEDA, NASA Science (blog 'Daily records of atmospheric temperature with Perseverance'). Nota: −83 °C antes do amanhecer até 5 °C ao meio-dia (190 → 278 K)",
+      "temp_min_k": "Perseverance MEDA (Munguira et al. 2023; Martínez et al. 2023, JGR Planets doi:10.1029/2022JE007537). Nota: a mínima típica é 190 K; no inverno as noites ficam alguns K mais frias",
+      "precip_mm": "Sem chuva líquida em Marte: = 0 por definição",
+      "ndvi": "Sem vegetação: NDVI = 0 por definição",
+      "albedo": "Média OMEGA na região do Perseverance (EPSC 2026, MEDA após 1.600 sols). Nota: MEDA mede 0,10–0,23 dependendo do terreno e do ângulo",
+      "illumination": "Não se aplica a Marte (ciclo diário parecido com o da Terra)",
+      "ground_ice": "Latitude 18°N: fora da faixa de gelo raso mapeada (SWIM, Morgan et al. 2021)"
+    },
+    "confidence": {
+      "slope_deg": "computed",
+      "roughness_m": "computed",
+      "temp_range_k": "derived",
+      "temp_min_k": "estimate",
+      "precip_mm": "published",
+      "ndvi": "published",
+      "albedo": "published",
+      "illumination": "published",
+      "ground_ice": "published"
+    }
   },
   {
     "id": "mars_gale",
     "body": "mars",
-    "name": { "pt": "Cratera Gale", "en": "Gale Crater" },
-    "short": { "pt": "Gale", "en": "Gale" },
-    "lat": -4.59, "lon": 137.44,
+    "name": {
+      "pt": "Cratera Gale",
+      "en": "Gale Crater"
+    },
+    "short": {
+      "pt": "Gale",
+      "en": "Gale"
+    },
+    "lat": -4.59,
+    "lon": 137.44,
     "blurb": {
       "pt": "Cratera de impacto com um monte central de sedimentos em camadas (Aeolis Mons), explorada pelo rover Curiosity.",
       "en": "Impact crater with a central mound of layered sediments (Aeolis Mons), explored by the Curiosity rover."
     },
     "params": {
-      "slope_deg": 5, "roughness_m": 90, "temp_range_k": 85, "temp_min_k": 185,
-      "precip_mm": 0, "ndvi": 0, "albedo": 0.22,
-      "illumination": null, "ground_ice": false
+      "slope_deg": 2.8,
+      "roughness_m": 26,
+      "temp_range_k": 80,
+      "temp_min_k": 175,
+      "precip_mm": 0,
+      "ndvi": 0,
+      "albedo": 0.22,
+      "illumination": null,
+      "ground_ice": false
     },
     "never_on_earth": {
-      "pt": ["gravidade de 0,38 g", "pressão de cerca de 0,6% da terrestre", "atmosfera de CO₂", "radiação UV e cósmica na superfície"],
-      "en": ["0.38 g gravity", "pressure about 0.6% of Earth's", "CO₂ atmosphere", "UV and cosmic radiation at the surface"]
+      "pt": [
+        "gravidade de 0,38 g",
+        "pressão de cerca de 0,6% da terrestre",
+        "atmosfera de CO₂",
+        "radiação UV e cósmica na superfície"
+      ],
+      "en": [
+        "0.38 g gravity",
+        "pressure about 0.6% of Earth's",
+        "CO₂ atmosphere",
+        "UV and cosmic radiation at the surface"
+      ]
     },
-    "_mock": true
+    "_mock": false,
+    "sources": {
+      "slope_deg": "MOLA (MGS), mosaico global 463 m/px (USGS Astrogeology): média de 88 blocos de ~2 km num raio de 10 km do ponto",
+      "roughness_m": "MOLA (MGS), mosaico global 463 m/px (USGS Astrogeology): média de 88 blocos de ~2 km num raio de 10 km do ponto",
+      "temp_range_k": "Curiosity REMS, Gómez-Elvira et al. (Granada 2017, dois anos marcianos). Nota: máximas de ~250–290 K e mínimas de ~170–210 K ao longo do ano (meio das faixas: 270 − 190)",
+      "temp_min_k": "Curiosity REMS, Gómez-Elvira et al. (Granada 2017). Nota: parte baixa da faixa de mínimas (170–210 K), atingida no fim do outono",
+      "precip_mm": "Sem chuva líquida em Marte: = 0 por definição",
+      "ndvi": "Sem vegetação: NDVI = 0 por definição",
+      "albedo": "Mapa de albedo TES (Christensen et al. 2001) na região de Gale; Vasavada et al. 2017 (Icarus) ao longo do trajeto",
+      "illumination": "Não se aplica a Marte",
+      "ground_ice": "Equatorial: sem gelo raso mapeado (SWIM)"
+    },
+    "confidence": {
+      "slope_deg": "computed",
+      "roughness_m": "computed",
+      "temp_range_k": "derived",
+      "temp_min_k": "derived",
+      "precip_mm": "published",
+      "ndvi": "published",
+      "albedo": "estimate",
+      "illumination": "published",
+      "ground_ice": "published"
+    }
   },
   {
     "id": "mars_arcadia",
     "body": "mars",
-    "name": { "pt": "Arcadia Planitia", "en": "Arcadia Planitia" },
-    "short": { "pt": "Arcadia", "en": "Arcadia" },
-    "lat": 47.2, "lon": -175.7,
+    "name": {
+      "pt": "Arcadia Planitia",
+      "en": "Arcadia Planitia"
+    },
+    "short": {
+      "pt": "Arcadia",
+      "en": "Arcadia"
+    },
+    "lat": 47.2,
+    "lon": -175.7,
     "blurb": {
       "pt": "Planície de latitude média com gelo de água raso sob o solo, candidata a pouso humano.",
       "en": "Mid-latitude plain with shallow subsurface water ice, a candidate site for human landing."
     },
     "params": {
-      "slope_deg": 1, "roughness_m": 15, "temp_range_k": 60, "temp_min_k": 150,
-      "precip_mm": 0, "ndvi": 0, "albedo": 0.25,
-      "illumination": null, "ground_ice": true
+      "slope_deg": 0.2,
+      "roughness_m": 3,
+      "temp_range_k": 60,
+      "temp_min_k": 150,
+      "precip_mm": 0,
+      "ndvi": 0,
+      "albedo": 0.24,
+      "illumination": null,
+      "ground_ice": true
     },
     "never_on_earth": {
-      "pt": ["gravidade de 0,38 g", "pressão de cerca de 0,6% da terrestre", "atmosfera de CO₂", "radiação UV e cósmica na superfície"],
-      "en": ["0.38 g gravity", "pressure about 0.6% of Earth's", "CO₂ atmosphere", "UV and cosmic radiation at the surface"]
+      "pt": [
+        "gravidade de 0,38 g",
+        "pressão de cerca de 0,6% da terrestre",
+        "atmosfera de CO₂",
+        "radiação UV e cósmica na superfície"
+      ],
+      "en": [
+        "0.38 g gravity",
+        "pressure about 0.6% of Earth's",
+        "CO₂ atmosphere",
+        "UV and cosmic radiation at the surface"
+      ]
     },
-    "_mock": true
+    "_mock": false,
+    "sources": {
+      "slope_deg": "MOLA (MGS), mosaico global 463 m/px (USGS Astrogeology): média de 88 blocos de ~2 km num raio de 10 km do ponto",
+      "roughness_m": "MOLA (MGS), mosaico global 463 m/px (USGS Astrogeology): média de 88 blocos de ~2 km num raio de 10 km do ponto",
+      "temp_range_k": "Viking Lander 2 (48°N, Utopia Planitia), análogo em latitude; Mars Climate Database. Nota: latitude média: amplitude diária menor que no equador",
+      "temp_min_k": "NASA/JPL PIA00530 (Viking Lander 2, 1977); ponto de geada do CO₂ ≈ −123 °C. Nota: no inverno a superfície chega ao ponto de geada do CO₂ (~150 K); o Viking 2 a 48°N mediu 160 K no ar e viu geada",
+      "precip_mm": "Sem chuva líquida em Marte: = 0 por definição",
+      "ndvi": "Sem vegetação: NDVI = 0 por definição",
+      "albedo": "Bramson et al., EPSC 2017-425 (modelo térmico de Arcadia Planitia). Nota: albedo usado no modelo térmico a 45°N em Arcadia",
+      "illumination": "Não se aplica a Marte",
+      "ground_ice": "SHARAD: camada de gelo em excesso a poucos metros (Bramson et al. 2015, GRL 42); SWIM (Morgan et al. 2021, Nature Astronomy)"
+    },
+    "confidence": {
+      "slope_deg": "computed",
+      "roughness_m": "computed",
+      "temp_range_k": "estimate",
+      "temp_min_k": "derived",
+      "precip_mm": "published",
+      "ndvi": "published",
+      "albedo": "published",
+      "illumination": "published",
+      "ground_ice": "published"
+    }
   }
 ]

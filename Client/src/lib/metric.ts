@@ -4,6 +4,9 @@
 //   categórico:  tabela em sigmas.json
 // Parâmetros se agrupam em dimensões; a nota final é a média ponderada das dimensões.
 // Dimensão sem parâmetro aplicável vira N/A (null) e sai da média, nunca vira zero.
+// Dados mínimos: se faltar dado da Terra em mais de sigmas.min_data.max_missing parâmetros que se aplicam
+// ao alvo, a célula fica sem nota (total = null). Sem isso, uma célula com só 2 ou 3 parâmetros
+// (ex.: plataformas de gelo antárticas) tiraria 100% só porque o resto saiu da média.
 
 import type {
   Cell, Comparison, DimKey, DimResult, EarthGrid, EarthParams, ParamKey, ParamResult, Sigmas, Target,
@@ -28,10 +31,12 @@ export function paramScore(key: ParamKey, earth: EarthParams, target: Target, cf
     return typeof v === 'number' ? v : null;
   }
   if (key === 'ground_ice') {
+    if (earth.ground_ice === null || earth.ground_ice === undefined) return null; // sem dado = N/A
     return earth.ground_ice === tv ? cfg.ground_ice_match.match : cfg.ground_ice_match.mismatch;
   }
 
-  const ev = earth[key] as number;
+  const ev = earth[key] as number | null;
+  if (ev === null || ev === undefined || Number.isNaN(ev)) return null; // sem dado = N/A, nunca zero
   const sigma = pc.sigma || 1;
   if (pc.one_sided) return Math.exp(-Math.max(0, ev) / sigma);
   const d = (ev - (tv as number)) / sigma;
@@ -56,6 +61,12 @@ export function compare(earth: EarthParams, target: Target, cfg: Sigmas): Compar
     byId[pc.dim].params.push(res);
   }
 
+  const missing = dims
+    .flatMap((d) => d.params)
+    .filter((p) => p.score === null && p.target !== null && p.target !== undefined)
+    .map((p) => p.key);
+  const maxMissing = cfg.min_data?.max_missing ?? 1;
+
   let wsum = 0;
   let acc = 0;
   for (const d of dims) {
@@ -66,14 +77,16 @@ export function compare(earth: EarthParams, target: Target, cfg: Sigmas): Compar
     wsum += w;
     acc += w * d.score;
   }
-  return { total: wsum > 0 ? acc / wsum : 0, dims };
+  const total = missing.length > maxMissing ? null : wsum > 0 ? acc / wsum : 0;
+  return { total, dims, missing };
 }
 
-/** Nota total de cada célula de terra para um alvo (mesma ordem de grid.land). */
+/** Nota total de cada célula de terra para um alvo (mesma ordem de grid.land). NaN = dados insuficientes. */
 export function scoreGrid(grid: EarthGrid, target: Target, cfg: Sigmas): Float32Array {
   const out = new Float32Array(grid.land.length);
   for (let i = 0; i < grid.land.length; i++) {
-    out[i] = compare(grid.land[i].p, target, cfg).total;
+    const t = compare(grid.land[i].p, target, cfg).total;
+    out[i] = t === null ? NaN : t;
   }
   return out;
 }
@@ -90,7 +103,9 @@ export interface Ranked { cell: Cell; score: number; }
 
 /** Melhores células para o alvo, com separação mínima para não listar vizinhas repetidas. */
 export function topAnalogs(grid: EarthGrid, scores: Float32Array, n = 8, minSepDeg = 7): Ranked[] {
-  const idx = Array.from(scores.keys()).sort((a, b) => scores[b] - scores[a]);
+  const idx = Array.from(scores.keys())
+    .filter((i) => !Number.isNaN(scores[i])) // sem nota não entra no ranking
+    .sort((a, b) => scores[b] - scores[a]);
   const picked: Ranked[] = [];
   for (const i of idx) {
     const c = grid.land[i];

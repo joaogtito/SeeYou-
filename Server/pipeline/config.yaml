@@ -1,0 +1,193 @@
+# Configuração do pipeline de dados reais do SeeYou (Analog Finder).
+# Caminhos relativos a Server/.
+
+paths:
+  raw: data/raw                                 # ignorado no git
+  interim: data/interim                         # ignorado no git
+  public_data: ../Client/public/data            # earth_grid.json + metadata.json
+  frontend_targets: ../Client/src/data/targets.json
+  curated: ../Client/src/data/curated.json
+  sigmas: ../Client/src/data/sigmas.json
+  targets_published: pipeline/targets_published.yaml
+
+grid:
+  res_deg: 0.25
+  land_fraction_min: 0.5      # célula entra se ≥ 50% dos blocos de ~2 km forem terra
+
+period:                        # médias climáticas de vários anos
+  start_year: 2015
+  end_year: 2024
+
+reference_scale_m: 2000        # escala horizontal de referência nos três corpos (~2 km)
+
+# ------------------------------------------------------------------ relevo
+relief:
+  source: glo90                # glo90 (padrão) | etopo (plano B: ETOPO 2022 15")
+  stream: true                 # true: lê os tiles GLO-90 direto do S3 público (sem guardar dezenas de GB)
+  workers: 8                   # processos em paralelo
+  max_tiles: null              # número para teste rápido (ex.: 50); null = todos
+
+# ------------------------------------------------------------------ produtos NASA (earthaccess)
+earthdata:
+  auth_strategy: netrc         # netrc | interactive | environment
+  threads: 4
+
+products:
+  lst:
+    short_name: MOD11C3        # MODIS/Terra LST/E mensal, CMG 0,05°
+    version: "061"
+    sds_day: LST_Day_CMG
+    sds_night: LST_Night_CMG
+    scale: 0.02
+  ndvi:
+    short_name: MOD13C2        # MODIS/Terra índices de vegetação mensais, CMG 0,05°
+    version: "061"
+    sds: "CMG 0.05 Deg Monthly NDVI"
+    scale: 0.0001
+    fill: [-3000]
+    valid_raw: [-2000, 10000]
+  albedo:
+    short_name: MCD43C3        # MODIS Terra+Aqua albedo diário, CMG 0,05°
+    version: "061"
+    sds: Albedo_WSA_shortwave  # white-sky, banda larga (0,3–5 µm)
+    scale: 0.001
+    fill: [32767]
+    valid_raw: [0, 1000]
+    days_of_month: [15]        # 1 dia por mês (produto diário: 3.650 arquivos → 120)
+  precip:
+    short_name: GPM_3IMERGM    # GPM IMERG Final mensal, 0,1°
+    version: "07"
+    min_months: 6
+  snow:
+    short_name: MOD10CM        # MODIS/Terra cobertura de neve mensal, CMG 0,05°
+    version: "61"
+    sds: Snow_Cover_Monthly_CMG
+    threshold_pct: 50          # neve/gelo permanente: menor média mensal ≥ 50%
+
+permafrost:
+  base_url: https://dap.ceda.ac.uk/neodc/esacci/permafrost/data/permafrost_extent/L4/area4/pp
+  version: "05.0"
+  regions:                     # pasta no CEDA -> código da área no nome do arquivo
+    northern_hemisphere: AREA4
+    Antarctica: AREA27
+  threshold_pct: 50            # ground_ice = 1 se fração de permafrost ≥ 50%
+
+# ------------------------------------------------------------------ Lua e Marte
+moon_mars:
+  dems:
+    moon:
+      url: https://planetarymaps.usgs.gov/mosaic/Lunar_LRO_LOLA_Global_LDEM_118m_Mar2014.tif
+      pixel_m: 118.45
+    mars:
+      url: https://planetarymaps.usgs.gov/mosaic/Mars_MGS_MOLA_DEM_mosaic_global_463m.tif
+      pixel_m: 463.09
+
+# ------------------------------------------------------------------ exportação
+export:
+  digits:                      # casas decimais (0 = inteiro)
+    slope_deg: 1
+    roughness_m: 0
+    temp_range_k: 1
+    temp_min_k: 1
+    precip_mm: 0
+    ndvi: 2
+    albedo: 2
+
+# ------------------------------------------------------------------ validação
+validation:
+  ranges:                      # ERRO se algum valor sair destas faixas
+    slope_deg: [0, 90]
+    roughness_m: [0, 3000]
+    temp_range_k: [-5, 80]
+    temp_min_k: [170, 340]       # ~180 K no plano; margem para o platô antártico
+    precip_mm: [0, 15000]
+    ndvi: [-1, 1]
+    albedo: [0, 1]
+    ground_ice: [0, 1]
+  target_ranges:               # faixas dos alvos (Lua chega a ~25 K e ~400 K)
+    slope_deg: [0, 90]
+    roughness_m: [0, 3000]
+    temp_range_k: [0, 400]
+    temp_min_k: [20, 300]
+    precip_mm: [0, 0]
+    ndvi: [0, 0]
+    albedo: [0, 1]
+  min_coverage: 0.8            # AVISO se < 80% das células de terra tiverem o campo
+  coverage_lat_range:          # campos cujo produto não cobre o globo todo: a cobertura conta só nesta faixa
+    ndvi: [-60, 90]            # MOD13C2 não cobre a Antártida (fica N/A no front)
+  control_points:              # AVISO se falhar; ids de Client/src/data/curated.json
+    atacama:
+      precip_mm: ["<", 50]
+      ndvi: ["<", 0.15]
+    mcmurdo:
+      temp_min_k: ["<", 240]
+      ground_ice: ["==", 1]
+    haughton:
+      ground_ice: ["==", 1]
+      temp_min_k: ["<", 250]
+    araguainha:
+      precip_mm: [">", 1000]
+      ndvi: [">", 0.3]
+  expected_analogs:            # AVISO se a região não ficar no percentil mínimo do ranking
+    - {target: mars_jezero, name: "Atacama", bbox: [-27, -19, -71, -67], min_percentile: 90}
+    - {target: mars_gale, name: "Atacama", bbox: [-27, -19, -71, -67], min_percentile: 90}
+    - {target: mars_arcadia, name: "Vales Secos de McMurdo", bbox: [-78.5, -76.5, 159, 165], min_percentile: 90}
+    - {target: moon_shackleton_ridge, name: "Antártida", bbox: [-90, -60, -180, 180], min_percentile: 90}
+    - {target: moon_psr_cabeus, name: "Antártida", bbox: [-90, -60, -180, 180], min_percentile: 90}
+
+# ------------------------------------------------------------------ metadata.json
+metadata:
+  reference_scale_km: 2
+  fields:
+    slope_deg:
+      unit: "°"
+      description: "Declividade média, do DEM reamostrado para ~2 km, média por célula de 0,25°"
+      glo90: {source: "Copernicus DEM", product: "GLO-90 (COG, AWS Open Data)", period: "estático"}
+      etopo: {source: "NOAA NCEI", product: "ETOPO 2022 15 arc-sec surface", period: "estático"}
+    roughness_m:
+      unit: "m"
+      description: "Desvio-padrão da elevação em janelas de ~2 km, média por célula"
+      glo90: {source: "Copernicus DEM", product: "GLO-90 (COG, AWS Open Data)", period: "estático"}
+      etopo: {source: "NOAA NCEI", product: "ETOPO 2022 15 arc-sec surface", period: "estático"}
+    temp_range_k:
+      unit: "K"
+      description: "Média anual da diferença LST dia − noite"
+      source: "NASA LP DAAC"
+      product: "MOD11C3 v061 (LST_Day_CMG − LST_Night_CMG)"
+      period: config
+    temp_min_k:
+      unit: "K"
+      description: "Menor média mensal da LST noturna (climatologia)"
+      source: "NASA LP DAAC"
+      product: "MOD11C3 v061 (LST_Night_CMG)"
+      period: config
+    precip_mm:
+      unit: "mm/ano"
+      description: "Chuva anual (média dos meses × 12)"
+      source: "NASA GES DISC"
+      product: "GPM IMERG Final mensal V07 (GPM_3IMERGM)"
+      period: config
+      note: "O IMERG superestima a chuva em desertos hiperáridos (ex.: ~78 mm/ano no Atacama e ~72 mm/ano no Rub' al Khali, contra 1–15 mm/ano medidos em pluviômetros) e subestima a neve em regiões polares (perto de 0 mm/ano sobre a Antártida e a Groenlândia, onde caem cerca de 20–200 mm/ano em equivalente de água)"
+    ndvi:
+      unit: "adimensional"
+      description: "NDVI médio anual"
+      source: "NASA LP DAAC"
+      product: "MOD13C2 v061"
+      period: config
+      note: "Sem cobertura na Antártida (abaixo de 60°S): o parâmetro fica N/A e sai da média"
+    albedo:
+      unit: "adimensional"
+      description: "Albedo white-sky de banda larga, média anual (1 dia por mês)"
+      source: "NASA LP DAAC"
+      product: "MCD43C3 v061 (Albedo_WSA_shortwave)"
+      period: config
+    ground_ice:
+      unit: "0/1"
+      description: "1 se fração de permafrost ≥ 50% OU neve/gelo permanente (menor média mensal ≥ 50%)"
+      source: "ESA CCI Permafrost + NASA NSIDC DAAC"
+      product: "CCI Permafrost PFR v5.0 (NH + Antártida) + MOD10CM v61"
+      period: config
+  derived_in_frontend:
+    illumination: "Categoria pela latitude: polar (≥ 66,5°), mid (≥ 23,5°), tropical"
+  fixed_per_body:
+    note: "Fora da nota, sempre exibidos: gravidade, pressão, radiação e composição do ar (valores de referência por corpo)"

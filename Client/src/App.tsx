@@ -6,7 +6,7 @@ import {
   TopLeft, ViewSwitch, WhyPanel, bodyThumb, earthThumb,
 } from './components/Panels.tsx';
 import type { MenuItem, SearchItem } from './components/Panels.tsx';
-import type { Body, Cell, Curated, EarthGrid, Lang, Layer, Place, Sigmas, Target } from './lib/types.ts';
+import type { Body, Cell, Curated, DataMetadata, EarthGrid, Lang, Layer, Place, Sigmas, Target } from './lib/types.ts';
 import { angularDistDeg, cellAt, compare, scoreGrid, topAnalogs } from './lib/metric.ts';
 import type { Ranked } from './lib/metric.ts';
 import { generateMockGrid, gridFromFile } from './lib/mockGrid.ts';
@@ -54,6 +54,7 @@ export default function App() {
   const [layer, setLayer] = useState<Layer>('sat');
   const [targetId, setTargetId] = useState<string>('mars_jezero');
   const [grid, setGrid] = useState<EarthGrid | null>(null);
+  const [meta, setMeta] = useState<DataMetadata | null>(null);
   const [sel, setSel] = useState<{ lat: number; lon: number; cell: Cell } | null>(null);
   const [pov, setPov] = useState<Pov>(HOME);
   const [tex, setTex] = useState<HTMLCanvasElement | null>(null);
@@ -113,6 +114,17 @@ export default function App() {
     })();
     return () => { cancelled = true; };
   }, [getBase]);
+
+  /* ---------- metadata.json do pipeline (créditos de cada campo) ---------- */
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch(import.meta.env.BASE_URL + 'data/metadata.json')
+      .then((r) => (r.ok ? r.json() : null))
+      .then((m) => { if (!cancelled && m && m.fields) setMeta(m as DataMetadata); })
+      .catch(() => { /* sem metadata: o modal mostra só os créditos das imagens */ });
+    return () => { cancelled = true; };
+  }, []);
 
   const scores = useMemo(() => (grid ? scoreGrid(grid, target, SIGMAS) : null), [grid, targetId]);
   const top: Ranked[] = useMemo(() => (grid && scores ? topAnalogs(grid, scores, 8) : []), [grid, scores]);
@@ -250,7 +262,7 @@ export default function App() {
 
   const cmp = useMemo(() => (sel ? compare(sel.cell.p, target, SIGMAS) : null), [sel, targetId]);
   const selScores = useMemo(() => {
-    const o: Record<string, number> = {};
+    const o: Record<string, number | null> = {};
     if (sel) for (const t of TARGETS) o[t.id] = compare(sel.cell.p, t, SIGMAS).total;
     return o;
   }, [sel]);
@@ -438,7 +450,7 @@ export default function App() {
 
       {loading && <div className="panel loading">{tr('loadingImagery', lang)}</div>}
       {(toast || offline) && <div className="panel toast">{toast || tr('offline', lang)}</div>}
-      {about && <AboutModal lang={lang} credits={credits} onClose={() => setAbout(false)} />}
+      {about && <AboutModal lang={lang} credits={credits} isMock={!grid || grid.mock} meta={meta} onClose={() => setAbout(false)} />}
     </div>
   );
 }

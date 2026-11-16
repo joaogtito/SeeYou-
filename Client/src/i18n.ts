@@ -25,6 +25,23 @@ export const STR: Dict = {
   targetVal: { pt: 'Alvo', en: 'Target' },
   na: { pt: 'N/A', en: 'N/A' },
   naHint: { pt: 'não se aplica a este alvo', en: 'does not apply to this target' },
+  naNoData: { pt: 'sem dado medido neste ponto da Terra', en: 'no measured data at this point on Earth' },
+  source: { pt: 'Fonte', en: 'Source' },
+  insufficient: { pt: 'Dados insuficientes', en: 'Insufficient data' },
+  insufficientHint: {
+    pt: 'Sem nota: faltam dados da Terra em {n} parâmetros que se aplicam a este alvo ({list}).',
+    en: 'No score: Earth data is missing for {n} parameters that apply to this target ({list}).',
+  },
+  conf_estimate: { pt: 'estimativa', en: 'estimate' },
+  conf_derived: { pt: 'calculado de valores publicados', en: 'derived from published values' },
+  conf_computed: { pt: 'calculado do DEM', en: 'computed from DEM' },
+  conf_published: { pt: 'publicado', en: 'published' },
+  dataSources: { pt: 'Fontes dos dados da Terra', en: 'Earth data sources' },
+  targetSourcesHint: {
+    pt: 'A fonte de cada valor dos alvos aparece na ficha do alvo.',
+    en: 'The source of each target value is shown on the target card.',
+  },
+  generatedAt: { pt: 'gerado em', en: 'generated on' },
   similarity: { pt: 'similaridade', en: 'similarity' },
   compareWith: { pt: 'Comparar com', en: 'Compare with' },
   curated: { pt: 'Ponto curado', en: 'Curated site' },
@@ -61,9 +78,17 @@ export const STR: Dict = {
     pt: 'Bilateral: s = exp(−((terra − alvo) / σ)²). Unilateral (alvo = 0, como chuva e NDVI): s = exp(−terra / σ). Dimensão que não se aplica vira N/A e sai da média.',
     en: 'Two-sided: s = exp(−((earth − target) / σ)²). One-sided (target = 0, e.g. rain and NDVI): s = exp(−earth / σ). A dimension that does not apply becomes N/A and leaves the mean.',
   },
+  aboutFilters: {
+    pt: 'Chuva, vegetação (NDVI), gelo no subsolo e iluminação funcionam mais como filtros do que como réguas: qualquer lugar seco, sem plantas e com gelo tira perto de 100% neles. Eles separam desertos e gelos de florestas, mas não diferenciam um deserto de outro. Entre os bons candidatos, quem decide o ranking é relevo, térmica e albedo.',
+    en: 'Rainfall, vegetation (NDVI), ground ice and illumination act more as filters than as rulers: any dry, plant-free, icy place scores close to 100% on them. They separate deserts and ice from forests, but do not tell one desert from another. Among good candidates, terrain, thermal and albedo decide the ranking.',
+  },
   about3: {
     pt: 'ATENÇÃO: nesta versão os valores da Terra e dos alvos são FICTÍCIOS. A grade da Terra é estimada pela cor do mosaico Blue Marble, pela latitude e por ruído. As tolerâncias σ e os pesos são provisórios.',
     en: 'WARNING: in this version the Earth and target values are MOCK. The Earth grid is estimated from Blue Marble colour, latitude and noise. The σ tolerances and weights are provisional.',
+  },
+  about3real: {
+    pt: 'Os valores da Terra vêm de satélites da NASA e da ESA (relevo, temperatura, chuva, vegetação, albedo e gelo) processados para uma grade de 0,25°. Os alvos usam LOLA, Diviner, LEND, MOLA, TES e dados dos rovers. As tolerâncias σ e os pesos ainda são escolha do time.',
+    en: 'Earth values come from NASA and ESA satellites (terrain, temperature, rainfall, vegetation, albedo and ice) processed onto a 0.25° grid. Targets use LOLA, Diviner, LEND, MOLA, TES and rover data. The σ tolerances and weights are still the team\'s choice.',
   },
   about4: {
     pt: 'Imagens: NASA GIBS (Terra), NASA Moon Trek e Mars Trek (Lua e Marte). Não existe um padrão oficial de parâmetros para análogos: variáveis vêm de produtos de dados da NASA, pesos e tolerâncias são escolha do time.',

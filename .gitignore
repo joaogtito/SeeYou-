@@ -7,3 +7,18 @@ dist
 __pycache__/
 *.pyc
 graphify-out/
+
+# Pipeline de dados (dados brutos e intermediários, credenciais)
+Server/data/raw/
+Server/data/interim/
+.netrc
+_netrc
+
+# Docs internos e configuração do assistente (não versionados)
+CLAUDE.md
+.claude/
+Server/backend-dados-reais.md
+plano-analog-finder.md
+mvp-frontend-status.md
+**/plano-analog-finder.md
+**/mvp-frontend-status.md

@@ -1,0 +1,84 @@
+{
+  "pipeline_version": "0.1.0",
+  "generated_at": "2026-11-15",
+  "grid": {
+    "res_deg": 0.25,
+    "crs": "EPSG:4326",
+    "cell_position": "center",
+    "land_only": true,
+    "missing_value": null
+  },
+  "reference_scale_km": 2,
+  "relief_source": "glo90",
+  "fields": {
+    "slope_deg": {
+      "source": "Copernicus DEM",
+      "product": "GLO-90 (COG, AWS Open Data)",
+      "period": "estático",
+      "unit": "°",
+      "description": "Declividade média, do DEM reamostrado para ~2 km, média por célula de 0,25°"
+    },
+    "roughness_m": {
+      "source": "Copernicus DEM",
+      "product": "GLO-90 (COG, AWS Open Data)",
+      "period": "estático",
+      "unit": "m",
+      "description": "Desvio-padrão da elevação em janelas de ~2 km, média por célula"
+    },
+    "temp_range_k": {
+      "unit": "K",
+      "description": "Média anual da diferença LST dia − noite",
+      "source": "NASA LP DAAC",
+      "product": "MOD11C3 v061 (LST_Day_CMG − LST_Night_CMG)",
+      "period": "2015–2024"
+    },
+    "temp_min_k": {
+      "unit": "K",
+      "description": "Menor média mensal da LST noturna (climatologia)",
+      "source": "NASA LP DAAC",
+      "product": "MOD11C3 v061 (LST_Night_CMG)",
+      "period": "2015–2024"
+    },
+    "precip_mm": {
+      "unit": "mm/ano",
+      "description": "Chuva anual (média dos meses × 12)",
+      "source": "NASA GES DISC",
+      "product": "GPM IMERG Final mensal V07 (GPM_3IMERGM)",
+      "period": "2015–2024",
+      "note": "O IMERG superestima a chuva em desertos hiperáridos (ex.: ~78 mm/ano no Atacama e ~72 mm/ano no Rub' al Khali, contra 1–15 mm/ano medidos em pluviômetros) e subestima a neve em regiões polares (perto de 0 mm/ano sobre a Antártida e a Groenlândia, onde caem cerca de 20–200 mm/ano em equivalente de água)"
+    },
+    "ndvi": {
+      "unit": "adimensional",
+      "description": "NDVI médio anual",
+      "source": "NASA LP DAAC",
+      "product": "MOD13C2 v061",
+      "period": "2015–2024",
+      "note": "Sem cobertura na Antártida (abaixo de 60°S): o parâmetro fica N/A e sai da média"
+    },
+    "albedo": {
+      "unit": "adimensional",
+      "description": "Albedo white-sky de banda larga, média anual (1 dia por mês)",
+      "source": "NASA LP DAAC",
+      "product": "MCD43C3 v061 (Albedo_WSA_shortwave)",
+      "period": "2015–2024"
+    },
+    "ground_ice": {
+      "unit": "0/1",
+      "description": "1 se fração de permafrost ≥ 50% OU neve/gelo permanente (menor média mensal ≥ 50%)",
+      "source": "ESA CCI Permafrost + NASA NSIDC DAAC",
+      "product": "CCI Permafrost PFR v5.0 (NH + Antártida) + MOD10CM v61",
+      "period": "2015–2024"
+    }
+  },
+  "derived_in_frontend": {
+    "illumination": "Categoria pela latitude: polar (≥ 66,5°), mid (≥ 23,5°), tropical"
+  },
+  "fixed_per_body": {
+    "note": "Fora da nota, sempre exibidos: gravidade, pressão, radiação e composição do ar (valores de referência por corpo)"
+  },
+  "stats": {
+    "targets": 6,
+    "land_cells": 341928,
+    "earth_grid_bytes": 16886073
+  }
+}

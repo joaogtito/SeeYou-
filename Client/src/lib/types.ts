@@ -14,17 +14,22 @@ export type DimKey = 'relevo' | 'termica' | 'superficie' | 'agua' | 'operacao';
 
 export type EarthIllumination = 'tropical' | 'mid' | 'polar';
 
+// null = sem dado nesta célula (nuvem, borda de costa, polo sem cobertura).
+// Na métrica, valor faltante vira N/A e sai da média, nunca vira zero.
 export interface EarthParams {
-  slope_deg: number;
-  roughness_m: number;
-  temp_range_k: number;
-  temp_min_k: number;
-  precip_mm: number;
-  ndvi: number;
-  albedo: number;
+  slope_deg: number | null;
+  roughness_m: number | null;
+  temp_range_k: number | null;
+  temp_min_k: number | null;
+  precip_mm: number | null;
+  ndvi: number | null;
+  albedo: number | null;
   illumination: EarthIllumination;
-  ground_ice: boolean;
+  ground_ice: boolean | null;
 }
+
+/** Como cada valor de alvo foi obtido (ver Server/pipeline/targets_published.yaml). */
+export type Confidence = 'published' | 'derived' | 'estimate' | 'computed';
 
 export interface TargetParams {
   slope_deg: number | null;
@@ -48,7 +53,26 @@ export interface Target {
   blurb: Text2;
   params: TargetParams;
   never_on_earth: { pt: string[]; en: string[] };
+  sources?: Partial<Record<ParamKey, string>>;
+  confidence?: Partial<Record<ParamKey, Confidence>>;
   _mock?: boolean;
+}
+
+/** public/data/metadata.json, gerado pelo pipeline (Server/pipeline/70_export.py). */
+export interface FieldMeta {
+  source?: string;
+  product?: string;
+  period?: string;
+  unit?: string;
+  description?: string;
+  note?: string;
+}
+
+export interface DataMetadata {
+  pipeline_version: string;
+  generated_at: string;
+  relief_source?: string;
+  fields: Partial<Record<ParamKey, FieldMeta>>;
 }
 
 export interface ParamCfg {
@@ -64,6 +88,8 @@ export interface Sigmas {
   illumination_match: Record<string, Record<EarthIllumination, number>>;
   ground_ice_match: { match: number; mismatch: number };
   weights: Record<DimKey, number>;
+  /** Máximo de parâmetros aplicáveis sem dado da Terra antes da célula ficar sem nota. */
+  min_data?: { max_missing: number };
 }
 
 export interface Cell {
@@ -86,7 +112,7 @@ export interface ParamResult {
   key: ParamKey;
   dim: DimKey;
   score: number | null; // null = N/A
-  earth: number | string | boolean;
+  earth: number | string | boolean | null;
   target: number | string | boolean | null;
   unit: string;
 }
@@ -98,8 +124,11 @@ export interface DimResult {
 }
 
 export interface Comparison {
-  total: number;
+  /** null = dados insuficientes (faltam mais parâmetros do que sigmas.min_data.max_missing). */
+  total: number | null;
   dims: DimResult[];
+  /** Parâmetros que se aplicam ao alvo mas não têm dado da Terra nesta célula. */
+  missing: ParamKey[];
 }
 
 export interface Curated {

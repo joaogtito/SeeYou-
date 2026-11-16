@@ -1,0 +1,206 @@
+# Valores publicados para os 6 alvos (Lua e Marte), com a fonte de cada número.
+#
+# slope_deg e roughness_m são CALCULADOS pelo pipeline a partir de LOLA/MOLA
+# (20_download_moon_mars.py + 50_build_targets.py). Os valores aqui são só o
+# plano B, usado se o DEM não puder ser lido.
+#
+# confidence:
+#   published  -> número tirado diretamente da fonte citada
+#   derived    -> conta simples sobre números publicados (explicada em "note")
+#   estimate   -> estimativa coerente com a fonte, sem número exato publicado;
+#                 revisar antes da apresentação
+#
+# As coordenadas vêm de Client/src/data/targets.json (lat/lon de cada alvo).
+#
+# Convenções (iguais às da Terra):
+#   temp_range_k = amplitude dia − noite típica (média anual)
+#   temp_min_k   = mínima típica (menor média mensal noturna)
+#   albedo       = albedo bolométrico / broadband (comparável ao white-sky do MODIS)
+
+moon_shackleton_ridge:
+  radius_km: 5
+  params:
+    slope_deg:
+      value: 9.5
+      confidence: published
+      source: "LOLA 5 m/px, média de declividade numa área de 2,5 × 2,9 km da crista (estudo de seleção de pouso em Shackleton, 2025)"
+    roughness_m:
+      value: 60
+      confidence: estimate
+      source: "Estimativa a partir de declividades de 0–20° na crista (Barker et al. / PSJ 2024, área CR1)"
+    temp_range_k:
+      value: 140
+      confidence: derived
+      note: "180 K (pico de verão) − 38 K (noite polar) para superfície horizontal a 89°"
+      source: "Paige et al. 2010 (Science 330:479) e revisão Diviner; Williams et al. 2019 (JGR Planets, doi:10.1029/2019JE006028), sítio Connecting Ridge C2"
+    temp_min_k:
+      value: 60
+      confidence: estimate
+      note: "a crista fica iluminada ~80–90% do ano; mínima entre a noite polar (38 K) e a sombra curta de inverno"
+      source: "Williams et al. 2019 (Diviner, séries sazonais do sítio C2); Gläser et al. 2018 (iluminação)"
+    precip_mm: {value: 0, confidence: published, source: "Sem atmosfera: chuva = 0 por definição (regra 1 do plano)"}
+    ndvi: {value: 0, confidence: published, source: "Sem vegetação: NDVI = 0 por definição"}
+    albedo:
+      value: 0.15
+      confidence: estimate
+      source: "Albedo bolométrico típico das terras altas lunares usado nos modelos Diviner (Vasavada et al. 2012, JGR 117)"
+    illumination: {value: polar_grazing, confidence: published, source: "LOLA, iluminação do polo sul (Mazarico et al. 2011; Gläser et al. 2018)"}
+    ground_ice: {value: true, confidence: published, source: "Crateras permanentemente sombreadas vizinhas (Shackleton, de Gerlache) são armadilhas frias com gelo estável (Diviner/LEND)"}
+
+moon_psr_cabeus:
+  radius_km: 5
+  params:
+    slope_deg:
+      value: 12
+      confidence: estimate
+      source: "Fundo de cratera polar degradada; LOLA (Rosenburg et al. 2011, terras altas)"
+    roughness_m:
+      value: 80
+      confidence: estimate
+      source: "LOLA (Rosenburg et al. 2011, terras altas)"
+    temp_range_k:
+      value: 15
+      confidence: estimate
+      note: "região em sombra permanente: só aquece por luz refletida e calor interno"
+      source: "Paige et al. 2010 (Science 330:479): máximas anuais em PSRs grandes de 40–90 K"
+    temp_min_k:
+      value: 37
+      confidence: published
+      note: "temperatura média anual da parte em sombra permanente; 40 K no ponto do LCROSS antes do impacto"
+      source: "Diviner, Paige et al. 2010 (Science 330:479)"
+    precip_mm: {value: 0, confidence: published, source: "Sem atmosfera: chuva = 0 por definição"}
+    ndvi: {value: 0, confidence: published, source: "Sem vegetação: NDVI = 0 por definição"}
+    albedo:
+      value: 0.15
+      confidence: estimate
+      source: "Albedo bolométrico das terras altas lunares (Vasavada et al. 2012); dentro da PSR não há luz direta"
+    illumination: {value: permanent_shadow, confidence: published, source: "LOLA: região em sombra permanente (Mazarico et al. 2011)"}
+    ground_ice:
+      value: true
+      confidence: published
+      source: "LCROSS: 5,6 ± 2,9% de água em massa no regolito do ponto de impacto (Colaprete et al. 2010, Science 330:463); LEND: hidrogênio elevado em Cabeus"
+
+moon_mare_tranquillitatis:
+  radius_km: 10
+  params:
+    slope_deg:
+      value: 2
+      confidence: estimate
+      source: "Mares são as regiões mais lisas da Lua (Rosenburg et al. 2011, LOLA)"
+    roughness_m:
+      value: 15
+      confidence: estimate
+      source: "Rosenburg et al. 2011 (LOLA): rugosidade dos mares bem menor que a das terras altas"
+    temp_range_k:
+      value: 284
+      confidence: derived
+      note: "385 K ao meio-dia − 101 K à meia-noite, temperaturas típicas equatoriais"
+      source: "Diviner, Vasavada et al. 2012 (JGR Planets 117, E00H18)"
+    temp_min_k:
+      value: 95
+      confidence: published
+      note: "mínima antes do nascer do Sol no equador"
+      source: "Diviner, Vasavada et al. 2012 (JGR Planets 117, E00H18)"
+    precip_mm: {value: 0, confidence: published, source: "Sem atmosfera: chuva = 0 por definição"}
+    ndvi: {value: 0, confidence: published, source: "Sem vegetação: NDVI = 0 por definição"}
+    albedo:
+      value: 0.07
+      confidence: estimate
+      source: "Albedo bolométrico típico de mare basáltico (modelos Diviner; Vasavada et al. 2012)"
+    illumination: {value: long_day_night, confidence: published, source: "Ciclo dia/noite lunar de ~29,5 dias terrestres"}
+    ground_ice: {value: false, confidence: published, source: "Equador lunar: temperaturas diurnas não permitem gelo superficial estável"}
+
+mars_jezero:
+  radius_km: 10
+  params:
+    slope_deg:
+      value: 1
+      confidence: estimate
+      source: "Fundo da cratera; caracterização do sítio de pouso Mars 2020 (Golombek et al.)"
+    roughness_m:
+      value: 10
+      confidence: estimate
+      source: "MOLA (fundo plano da cratera)"
+    temp_range_k:
+      value: 88
+      confidence: derived
+      note: "−83 °C antes do amanhecer até 5 °C ao meio-dia (190 → 278 K)"
+      source: "Perseverance MEDA, NASA Science (blog 'Daily records of atmospheric temperature with Perseverance')"
+    temp_min_k:
+      value: 185
+      confidence: estimate
+      note: "a mínima típica é 190 K; no inverno as noites ficam alguns K mais frias"
+      source: "Perseverance MEDA (Munguira et al. 2023; Martínez et al. 2023, JGR Planets doi:10.1029/2022JE007537)"
+    precip_mm: {value: 0, confidence: published, source: "Sem chuva líquida em Marte: = 0 por definição"}
+    ndvi: {value: 0, confidence: published, source: "Sem vegetação: NDVI = 0 por definição"}
+    albedo:
+      value: 0.16
+      confidence: published
+      note: "MEDA mede 0,10–0,23 dependendo do terreno e do ângulo"
+      source: "Média OMEGA na região do Perseverance (EPSC 2026, MEDA após 1.600 sols)"
+    illumination: {value: null, confidence: published, source: "Não se aplica a Marte (ciclo diário parecido com o da Terra)"}
+    ground_ice: {value: false, confidence: published, source: "Latitude 18°N: fora da faixa de gelo raso mapeada (SWIM, Morgan et al. 2021)"}
+
+mars_gale:
+  radius_km: 10
+  params:
+    slope_deg:
+      value: 3
+      confidence: estimate
+      source: "Aeolis Palus, fundo de Gale; caracterização do sítio MSL (Golombek et al. 2012)"
+    roughness_m:
+      value: 30
+      confidence: estimate
+      source: "MOLA (Aeolis Palus e base do Aeolis Mons)"
+    temp_range_k:
+      value: 80
+      confidence: derived
+      note: "máximas de ~250–290 K e mínimas de ~170–210 K ao longo do ano (meio das faixas: 270 − 190)"
+      source: "Curiosity REMS, Gómez-Elvira et al. (Granada 2017, dois anos marcianos)"
+    temp_min_k:
+      value: 175
+      confidence: derived
+      note: "parte baixa da faixa de mínimas (170–210 K), atingida no fim do outono"
+      source: "Curiosity REMS, Gómez-Elvira et al. (Granada 2017)"
+    precip_mm: {value: 0, confidence: published, source: "Sem chuva líquida em Marte: = 0 por definição"}
+    ndvi: {value: 0, confidence: published, source: "Sem vegetação: NDVI = 0 por definição"}
+    albedo:
+      value: 0.22
+      confidence: estimate
+      source: "Mapa de albedo TES (Christensen et al. 2001) na região de Gale; Vasavada et al. 2017 (Icarus) ao longo do trajeto"
+    illumination: {value: null, confidence: published, source: "Não se aplica a Marte"}
+    ground_ice: {value: false, confidence: published, source: "Equatorial: sem gelo raso mapeado (SWIM)"}
+
+mars_arcadia:
+  radius_km: 10
+  params:
+    slope_deg:
+      value: 0.5
+      confidence: estimate
+      source: "Planície lisa; MOLA (Kreslavsky & Head 2000, rugosidade das planícies do norte)"
+    roughness_m:
+      value: 5
+      confidence: estimate
+      source: "MOLA (Kreslavsky & Head 2000)"
+    temp_range_k:
+      value: 60
+      confidence: estimate
+      note: "latitude média: amplitude diária menor que no equador"
+      source: "Viking Lander 2 (48°N, Utopia Planitia), análogo em latitude; Mars Climate Database"
+    temp_min_k:
+      value: 150
+      confidence: derived
+      note: "no inverno a superfície chega ao ponto de geada do CO₂ (~150 K); o Viking 2 a 48°N mediu 160 K no ar e viu geada"
+      source: "NASA/JPL PIA00530 (Viking Lander 2, 1977); ponto de geada do CO₂ ≈ −123 °C"
+    precip_mm: {value: 0, confidence: published, source: "Sem chuva líquida em Marte: = 0 por definição"}
+    ndvi: {value: 0, confidence: published, source: "Sem vegetação: NDVI = 0 por definição"}
+    albedo:
+      value: 0.24
+      confidence: published
+      note: "albedo usado no modelo térmico a 45°N em Arcadia"
+      source: "Bramson et al., EPSC 2017-425 (modelo térmico de Arcadia Planitia)"
+    illumination: {value: null, confidence: published, source: "Não se aplica a Marte"}
+    ground_ice:
+      value: true
+      confidence: published
+      source: "SHARAD: camada de gelo em excesso a poucos metros (Bramson et al. 2015, GRL 42); SWIM (Morgan et al. 2021, Nature Astronomy)"

@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import type { Body, Comparison, Curated, EarthParams, Lang, Layer, ParamResult, Target } from '../lib/types.ts';
+import type { Body, Comparison, Curated, DataMetadata, EarthParams, Lang, Layer, ParamKey, ParamResult, Target } from '../lib/types.ts';
 import { DIM_NAMES, PARAM_NAMES, fmtCoord, fmtValue, similarPrefix, tr } from '../i18n.ts';
 import {
   IconAlert, IconArrowRight, IconCenter, IconCheck, IconClear, IconClose, IconCompass, IconGlobe, IconInfo,
@@ -8,15 +8,19 @@ import {
 import logoUrl from '../assets/logo-seeyou.png';
 
 const pct = (v: number) => `${Math.round(v * 100)}%`;
+/** Nota ou "—" quando a célula não tem dados suficientes. */
+const pctOrDash = (v: number | null | undefined) => (v === null || v === undefined || Number.isNaN(v) ? '—' : pct(v));
 
 /* ---------- miniaturas (gradientes; sem fotos no MVP) ---------- */
 
 export function earthThumb(p: EarthParams): React.CSSProperties {
   let g: string;
-  if (p.albedo > 0.6) g = 'linear-gradient(160deg,#f1f6ff 0%,#b9cde6 55%,#7f9cc0 100%)';
-  else if (p.ndvi > 0.45) g = 'linear-gradient(160deg,#9fd08a 0%,#3f8a4a 55%,#1f5a34 100%)';
-  else if (p.ndvi > 0.2) g = 'linear-gradient(160deg,#d8cf8f 0%,#9a9a55 55%,#5f6b3a 100%)';
-  else if (p.albedo > 0.3) g = 'linear-gradient(160deg,#f3d9a4 0%,#d9a866 55%,#a8703d 100%)';
+  const albedo = p.albedo ?? 0.2; // sem dado: cai no tom neutro
+  const ndvi = p.ndvi ?? 0;
+  if (albedo > 0.6) g = 'linear-gradient(160deg,#f1f6ff 0%,#b9cde6 55%,#7f9cc0 100%)';
+  else if (ndvi > 0.45) g = 'linear-gradient(160deg,#9fd08a 0%,#3f8a4a 55%,#1f5a34 100%)';
+  else if (ndvi > 0.2) g = 'linear-gradient(160deg,#d8cf8f 0%,#9a9a55 55%,#5f6b3a 100%)';
+  else if (albedo > 0.3) g = 'linear-gradient(160deg,#f3d9a4 0%,#d9a866 55%,#a8703d 100%)';
   else g = 'linear-gradient(160deg,#a9a096 0%,#6f655c 55%,#3f3a37 100%)';
   return { backgroundImage: `radial-gradient(circle at 75% 20%,rgba(255,255,255,.45),transparent 40%),${g}` };
 }
@@ -196,7 +200,7 @@ export function LocationMenu(props: {
 
 /* ---------- comparação ---------- */
 
-function ParamCard({ p, lang }: { p: ParamResult; lang: Lang }) {
+function ParamCard({ p, lang, source }: { p: ParamResult; lang: Lang; source?: string }) {
   return (
     <div className="param-card">
       <div className="param-head">
@@ -205,7 +209,9 @@ function ParamCard({ p, lang }: { p: ParamResult; lang: Lang }) {
       </div>
       <div className="param-vals">
         <span>{tr('earthVal', lang)}: <b>{fmtValue(p.earth, p.unit, lang)}</b></span>
-        <span>{tr('targetVal', lang)}: <b>{fmtValue(p.target, p.unit, lang)}</b></span>
+        <span title={source ? `${tr('source', lang)}: ${source}` : undefined}>
+          {tr('targetVal', lang)}: <b>{fmtValue(p.target, p.unit, lang)}</b>
+        </span>
       </div>
       <span className="bar"><span style={{ width: p.score === null ? '0%' : pct(p.score) }} /></span>
     </div>
@@ -217,7 +223,9 @@ export function WhyPanel({ mode, cmp, target, lang }: { mode: 'why' | 'whynot'; 
   const list = all
     .filter((p) => p.score !== null && (mode === 'why' ? p.score >= 0.5 : p.score < 0.5))
     .sort((a, b) => (mode === 'why' ? (b.score as number) - (a.score as number) : (a.score as number) - (b.score as number)));
-  const nas = all.filter((p) => p.score === null);
+  // N/A tem duas causas: o parâmetro não se aplica ao alvo, ou falta o dado da Terra nesta célula.
+  const nas = all.filter((p) => p.score === null && (p.target === null || p.target === undefined));
+  const noData = all.filter((p) => p.score === null && p.target !== null && p.target !== undefined);
   const dims = cmp.dims.filter((d) => d.score !== null && (mode === 'why' ? d.score >= 0.5 : d.score < 0.5));
   return (
     <section className={`panel why-panel ${mode}`}>
@@ -233,6 +241,14 @@ export function WhyPanel({ mode, cmp, target, lang }: { mode: 'why' | 'whynot'; 
       </header>
       <div className="divider" />
       <div className="why-scroll">
+        {mode === 'whynot' && cmp.total === null && (
+          <p className="insufficient">
+            <b>{tr('insufficient', lang)}.</b>{' '}
+            {tr('insufficientHint', lang)
+              .replace('{n}', String(cmp.missing.length))
+              .replace('{list}', cmp.missing.map((k) => PARAM_NAMES[k][lang]).join(', '))}
+          </p>
+        )}
         {dims.length > 0 && (
           <div className="dim-chips">
             {dims.map((d) => (
@@ -241,10 +257,15 @@ export function WhyPanel({ mode, cmp, target, lang }: { mode: 'why' | 'whynot'; 
           </div>
         )}
         {list.length === 0 && <p className="muted small">{tr(mode === 'why' ? 'noneWhy' : 'noneWhyNot', lang)}</p>}
-        {list.map((p) => <ParamCard key={p.key} p={p} lang={lang} />)}
+        {list.map((p) => <ParamCard key={p.key} p={p} lang={lang} source={target.sources?.[p.key]} />)}
         {mode === 'whynot' && nas.length > 0 && (
           <p className="muted small">
             {tr('na', lang)}: {nas.map((p) => PARAM_NAMES[p.key][lang]).join(', ')} ({tr('naHint', lang)}).
+          </p>
+        )}
+        {mode === 'whynot' && noData.length > 0 && (
+          <p className="muted small">
+            {tr('na', lang)}: {noData.map((p) => PARAM_NAMES[p.key][lang]).join(', ')} ({tr('naNoData', lang)}).
           </p>
         )}
         {mode === 'whynot' && (
@@ -262,10 +283,10 @@ export function SelectedCard(props: {
   name: string;
   lat: number;
   lon: number;
-  total: number;
+  total: number | null;
   target: Target;
   targets: Target[];
-  scores: Record<string, number>;
+  scores: Record<string, number | null>;
   curated: Curated | null;
   lang: Lang;
   onTarget: (id: string) => void;
@@ -283,20 +304,26 @@ export function SelectedCard(props: {
         <button className="icon-btn" onClick={props.onClose} aria-label={tr('close', lang)}><IconClose size={18} /></button>
       </header>
       <div className="sel-score">
-        <strong>{pct(props.total)}</strong>
+        <strong>{pctOrDash(props.total)}</strong>
         <span>
           {similarPrefix(lang, target.body)} <em className={`accent-${target.body}`}>{target.body === 'mars' ? tr('mars', lang) : tr('moon', lang)}</em>
           <br />
           <small>{target.name[lang]}</small>
+          {props.total === null && (
+            <>
+              <br />
+              <small className="insufficient-tag">{tr('insufficient', lang)}</small>
+            </>
+          )}
         </span>
       </div>
-      <span className="bar big"><span style={{ width: pct(props.total) }} /></span>
+      <span className="bar big"><span style={{ width: props.total === null ? '0%' : pct(props.total) }} /></span>
       <div className="target-chips">
         <small className="muted">{tr('compareWith', lang)}</small>
         <div>
           {props.targets.map((t) => (
             <button key={t.id} className={`chip body-${t.body}${t.id === target.id ? ' on' : ''}`} onClick={() => props.onTarget(t.id)}>
-              {t.short[lang]} <b>{pct(props.scores[t.id] || 0)}</b>
+              {t.short[lang]} <b>{pctOrDash(props.scores[t.id])}</b>
             </button>
           ))}
         </div>
@@ -327,12 +354,26 @@ export function TargetDetail({ target, best, lang, onViewEarth }: { target: Targ
         <p>{target.blurb[lang]}</p>
         <table>
           <tbody>
-            {keys.map((k) => (
-              <tr key={k}>
-                <td>{PARAM_NAMES[k][lang]}</td>
-                <td><b>{fmtValue(target.params[k], unitOf(k), lang)}</b></td>
-              </tr>
-            ))}
+            {keys.map((k) => {
+              const src = target.sources?.[k as ParamKey];
+              const conf = target.confidence?.[k as ParamKey];
+              return (
+                <React.Fragment key={k}>
+                  <tr className={src ? 'has-src' : undefined}>
+                    <td>
+                      {PARAM_NAMES[k][lang]}
+                      {conf === 'estimate' && <span className="conf-tag">{tr('conf_estimate', lang)}</span>}
+                    </td>
+                    <td><b>{fmtValue(target.params[k], unitOf(k), lang)}</b></td>
+                  </tr>
+                  {src && (
+                    <tr className="src-row">
+                      <td colSpan={2} title={conf ? tr(`conf_${conf}`, lang) : undefined}>{src}</td>
+                    </tr>
+                  )}
+                </React.Fragment>
+              );
+            })}
           </tbody>
         </table>
         {best && (
@@ -413,7 +454,10 @@ export function BottomBar(props: {
   );
 }
 
-export function AboutModal({ lang, credits, onClose }: { lang: Lang; credits: string[]; onClose: () => void }) {
+export function AboutModal({ lang, credits, isMock, meta, onClose }: {
+  lang: Lang; credits: string[]; isMock: boolean; meta: DataMetadata | null; onClose: () => void;
+}) {
+  const fields = meta ? (Object.keys(meta.fields) as ParamKey[]).filter((k) => PARAM_NAMES[k]) : [];
   return (
     <div className="modal-back" onClick={onClose}>
       <div className="panel modal" onClick={(e) => e.stopPropagation()}>
@@ -423,7 +467,27 @@ export function AboutModal({ lang, credits, onClose }: { lang: Lang; credits: st
         </header>
         <p>{tr('about1', lang)}</p>
         <p className="mono">{tr('about2', lang)}</p>
-        <p className="warn">{tr('about3', lang)}</p>
+        <p>{tr('aboutFilters', lang)}</p>
+        {isMock ? <p className="warn">{tr('about3', lang)}</p> : <p>{tr('about3real', lang)}</p>}
+        {!isMock && fields.length > 0 && meta && (
+          <div className="data-sources">
+            <h3>{tr('dataSources', lang)}</h3>
+            <ul>
+              {fields.map((k) => {
+                const f = meta.fields[k]!;
+                return (
+                  <li key={k}>
+                    <b>{PARAM_NAMES[k][lang]}</b>: {[f.product, f.source, f.period].filter(Boolean).join(' · ')}
+                    {f.note && <span className="src-note"> ({f.note})</span>}
+                  </li>
+                );
+              })}
+            </ul>
+            <p className="muted small">
+              {tr('targetSourcesHint', lang)} Pipeline v{meta.pipeline_version}, {tr('generatedAt', lang)} {meta.generated_at}.
+            </p>
+          </div>
+        )}
         <p>{tr('about4', lang)}</p>
         <p className="muted small">{credits.join(' · ')}</p>
       </div>
