@@ -1,90 +1,133 @@
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/joaogtito/SeeYou-/refs/heads/feat/readme-update/github_logo.png" alt="Logo da SeeYou Finder"/>
+  <img src="github_logo.png" alt="SeeYou Finder logo"/>
 </p>
 
-O **SeeYou Finder** é uma ferramenta de analise de dados avançada com um visualizador em globo 3D com três corpos (Terra, Lua, Marte).
+**SeeYou Finder** is a data analysis tool built around a 3D globe viewer with three bodies (Earth, Moon and Mars).
 
-Na Terra, clique em qualquer ponto para comparar a célula da grade com um dos 6 alvos. O painel mostra a nota por dimensão, mostra a justificativa da nota e explicita o que a Terra nunca reproduz.
+On Earth, click any point to compare that grid cell against one of 6 targets (3 on the Moon, 3 on Mars). The panel shows the score for each dimension, explains why each score was given, and spells out what Earth can never reproduce.
 
-> **Os números desta versão são fictícios.** A grade da Terra é estimada pela cor do mosaico Blue Marble, pela latitude e por ruído. Os valores dos alvos, as tolerâncias σ e os pesos são provisórios. Só as imagens de satélite são reais.
+> **Data status.** The Earth grid (0.25°, 8 parameters per land cell) and the target values come from real satellite data (NASA, ESA, USGS), produced by the offline pipeline in [`Server/`](Server/README.md). The σ tolerances and weights in `sigmas.json` are still **provisional**, and the texts for the curated points are still placeholders.
 
-## Nosso Desafio
+## Our Challenge
 
 **Identify Earth Locations that Analog the Permanent Moon Base Locations and Mars**
 
-## Como Rodar Localmente
+## Running Locally
 
 ```bash
-git clone https://github.com/joaogtito/SeeYou-.git 
-
-cd SeeYou-
-
-cd Client
+git clone https://github.com/joaogtito/SeeYou-.git
+cd SeeYou-/Client
 npm install
 npm run dev
 ```
 
-Após executar estes comandos a ferramenta poderá ser aberta em `http://localhost:5173`
+Then open the tool at `http://localhost:5173`.
 
-## Funcionalidades da Ferramenta
+Other commands, all run inside `Client/`:
 
-- Troca Terra / Marte / Lua com o tema de cada corpo (azul, laranja, cinza) do Figma.
-- Clique direto em qualquer ponto da Terra: destaca a célula e abre a comparação.
-- Métrica do plano rodando no navegador (`src/lib/metric.ts`), com N/A para dimensão que não se aplica.
-- Top Locais, mostra os melhores análogos do alvo ativo, com separação mínima entre eles.
-- Camadas SAT, FOLHAGEM (NDVI), CALOR (LST) e SIMILARIDADE (mapa de calor da nota).
-- 6 pontos curados com texto, incluindo Araguainha marcada como "Descoberta".
-- Vista de Lua e Marte com os 3 alvos de cada corpo e o botão "Ver análogos na Terra".
-- Busca, português/inglês, escala, altitude e coordenadas.
-
-## Estrutura
-
-```
-src/
-  App.tsx                 estado e layout
-  components/
-    GlobeView.tsx         globo 3D (react-globe.gl)
-    Panels.tsx            barra superior, Top Locais, painéis de comparação, barra inferior
-    Icons.tsx             ícones e logo em SVG
-  lib/
-    metric.ts             métrica de similaridade e ranking
-    mockGrid.ts           gerador da grade mockada + leitor do arquivo real
-    textures.ts           monta as texturas a partir dos tiles da NASA
-    types.ts              formato dos dados
-  data/
-    targets.json          6 alvos (MOCK)
-    sigmas.json           tolerâncias, tabelas categóricas e pesos (PROVISÓRIO)
-    curated.json          pontos curados e textos
-    gazetteer.json        nomes de regiões para a busca e para o Top Locais
-  i18n.ts                 textos PT/EN
-public/data/
-  earth_grid.sample.json  exemplo do formato da grade real
+```bash
+npm run build     # production build into dist/
+npm run preview   # serve the build locally
+npm run check     # quick metric check without a browser (Node 22.18+ or 24)
 ```
 
-## Trocar o mock pelos dados do pipeline
+The generated data (`Client/public/data/earth_grid.json`, `metadata.json` and `Client/src/data/targets.json`) is already in the repository, so you don't need to run the backend just to use the app. To regenerate it from the raw satellite data, see [`Server/README.md`](Server/README.md).
 
-1. **Grade da Terra.** Gere `public/data/earth_grid.json` no formato abaixo. Se o arquivo existir, o app usa ele e ignora o gerador mock; o selo "Dados fictícios" some quando `_mock` é `false`.
+## Features
 
-   ```json
-   {
-     "_mock": false,
-     "res_deg": 0.25,
-     "fields": ["slope_deg", "roughness_m", "temp_range_k", "temp_min_k", "precip_mm", "ndvi", "albedo", "ground_ice"],
-     "cells": [[lat, lon, 3.0, 40, 20.0, 285.0, 1500, 0.5, 0.15, 0]]
-   }
-   ```
+- Switch between Earth, Mars and Moon, each with its own theme (blue, orange, grey) from the Figma design.
+- Click any point on Earth to highlight its cell and open the comparison.
+- The similarity metric runs in the browser (`Client/src/lib/metric.ts`). A dimension with no applicable parameter is shown as N/A and left out of the average instead of counting as zero.
+- Top Places lists the best analogs for the active target, with a minimum distance between them.
+- Layers: SAT, FOLIAGE (NDVI), HEAT (LST) and SIMILARITY (score heatmap).
+- 6 curated points with descriptions, including Araguainha, marked as a "Discovery".
+- Moon and Mars views with the 3 targets of each body and a "See analogs on Earth" button.
+- About panel with the source, product, period and unit of each data field (read from `metadata.json`).
+- Search, Portuguese/English, scale bar, altitude and coordinates.
 
-   Só células de terra, `lat`/`lon` no centro da célula, `ground_ice` como 0 ou 1. O regime de iluminação é calculado pela latitude.
-   A 0,25° são cerca de 300 mil células: em JSON fica pesado (dezenas de MB). Para a demo, 0,5° ou um binário resolvem.
+## Project Structure
 
-2. **Alvos.** Substitua os valores de `params` em `Client/src/data/targets.json` pelos perfis de LOLA, Diviner, MOLA e MCD e remova `"_mock": true`.
+```
+Client/                       front-end (React + Vite + TypeScript)
+  src/
+    App.tsx                   state and layout
+    components/
+      GlobeView.tsx           3D globe (react-globe.gl)
+      Panels.tsx              top bar, Top Places, comparison panels, bottom bar, About modal
+      Icons.tsx               SVG icons and logo
+    lib/
+      metric.ts               similarity metric and ranking
+      mockGrid.ts             real grid file reader + mock grid generator (fallback)
+      textures.ts             builds the textures from NASA tiles
+      types.ts                data formats
+    data/
+      targets.json            the 6 targets with real values and their sources (generated by the pipeline)
+      sigmas.json             tolerances, categorical tables and weights (PROVISIONAL)
+      curated.json            curated points and texts
+      gazetteer.json          region names for search and Top Places
+    i18n.ts                   PT/EN strings
+  public/data/
+    earth_grid.json           real Earth grid (generated by the pipeline)
+    metadata.json             source, product, period and unit of each field (generated by the pipeline)
+    earth_grid.sample.json    small example of the grid format
+  scripts/
+    check-metric.ts           metric sanity check (npm run check)
 
-3. **Tolerâncias e pesos.** Ajuste `src/data/sigmas.json` e escreva a justificativa de cada σ.
+Server/                       offline data pipeline (Python, managed with uv)
+  pipeline/                   numbered scripts 00–70, config.yaml, targets_published.yaml
+  src/seeyou_server/          pure, testable functions (grid, relief, climate, metric, validate, export…)
+  tests/                      pytest with synthetic data
+```
 
-## Fontes das imagens
+## Data Pipeline
 
-- **Terra:** NASA GIBS (Blue Marble, MODIS NDVI 8 dias, MODIS LST dia), WMTS EPSG:4326.
-- **Lua:** NASA Moon Trek, mosaico LRO WAC.
-- **Marte:** NASA Mars Trek, mosaico Viking MDIM 2.1.
+The backend is an **offline Python pipeline**, not a server. It runs once, downloads real satellite data and writes the static files the front-end reads. In short:
 
+```bash
+cd Server
+uv sync
+uv run pytest                          # tests with synthetic data, no network
+uv run python pipeline/00_auth.py --interactive   # Earthdata login (once)
+uv run python pipeline/run_all.py      # full run, steps 00 to 70
+```
+
+Validation (`60_validate.py`) blocks the export if any field falls outside its physical range. Full details on each step, credentials, cost and runtime are in [`Server/README.md`](Server/README.md).
+
+### Earth grid format
+
+If `Client/public/data/earth_grid.json` exists, the app uses it; otherwise it falls back to the mock generator and shows a "Mock data" badge. The badge is hidden when `_mock` is `false`.
+
+```json
+{
+  "_mock": false,
+  "res_deg": 0.25,
+  "fields": ["slope_deg", "roughness_m", "temp_range_k", "temp_min_k", "precip_mm", "ndvi", "albedo", "ground_ice"],
+  "cells": [[lat, lon, 3.0, 40, 20.0, 285.0, 1500, 0.5, 0.15, 0]]
+}
+```
+
+Land cells only, `lat`/`lon` at the cell center, `ground_ice` as 0 or 1. The illumination regime is computed from latitude. At 0.25° the file is about 17 MB.
+
+### Still to do
+
+- **Tolerances and weights.** Tune `Client/src/data/sigmas.json` and write a justification for each σ.
+- **Curated points.** Review the texts in `Client/src/data/curated.json` (still marked `_mock`).
+
+## Data Sources
+
+**Imagery**
+- **Earth:** NASA GIBS (Blue Marble, MODIS NDVI 8-day, MODIS LST day), WMTS EPSG:4326.
+- **Moon:** NASA Moon Trek, LRO WAC mosaic.
+- **Mars:** NASA Mars Trek, Viking MDIM 2.1 mosaic.
+
+**Earth grid parameters**
+- Relief (slope, roughness): Copernicus DEM GLO-90.
+- Temperature (day−night range, minimum): MODIS MOD11C3.
+- Vegetation (NDVI): MODIS MOD13C2.
+- Albedo (white-sky): MODIS MCD43C3.
+- Annual precipitation: GPM IMERG.
+- Ground ice: ESA CCI Permafrost and MODIS MOD10CM (permanent snow).
+
+**Targets**
+- Relief is computed from LOLA (Moon) and MOLA (Mars) DEM crops around each target. The other values come from the literature (Diviner, LCROSS/LEND, Perseverance MEDA, Curiosity REMS, among others), collected in `Server/pipeline/targets_published.yaml`. Each target in `targets.json` lists the source of every value in its `sources` block.
